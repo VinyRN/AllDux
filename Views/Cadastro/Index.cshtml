@@ -1,0 +1,97 @@
+﻿@using System.Linq;
+@using alldux_plataforma.Models;
+@model User;
+
+@{
+    ViewData["Title"] = "Crie sua conta";
+}
+
+<div class="container">
+
+    <div class="mt-5 px-4 pt-5 pb-3 text-center">
+        <h1 class="display-5 fw-bold pt-4">@ViewData["Title"]</h1>
+        <div class="col-lg-6 mx-auto mb-3">No Alldux Plataforma você encontra as diretrizes clínicas que garantem o melhor desfecho clínico para o paciente, além de ter acesso às negociações de medicamentos que contribuem com a redução de seus custos e ferramenta de análise de custos de cada tratamento.</div>
+    </div>
+
+    <form method="post">
+
+    <div class="row">
+    <div class="col-6 offset-3 text-start">
+        
+            <div class="form-group mb-3">
+                <label asp-for="Name">Nome completo</label>
+                <input asp-for="Name" class="form-control" required />
+            </div>
+            
+            <div class="row">
+                <div class="form-group col mb-3">
+                    <label asp-for="Email">E-mail</label>
+                    <input asp-for="Email" class="form-control" required />
+                </div>
+                <div class="form-group col mb-3">
+                    <label asp-for="PhoneNumber">Telefone</label>
+                    <input asp-for="PhoneNumber" class="form-control" maxlength="11" onkeypress='return event.charCode >= 48 && event.charCode <= 57' required />
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="form-group col mb-3">
+                    <label asp-for="Company">Empresa</label>
+                    <input asp-for="Company" class="form-control" required />
+                </div>
+                <div class="form-group col mb-3">
+                    <label asp-for="Cargo">Cargo</label>
+                    <input asp-for="Cargo" class="form-control" required />
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="form-group col mb-3">
+                    <label asp-for="NomeGestor">Nome do Gestor</label>
+                    <input asp-for="NomeGestor" class="form-control" />
+                </div>
+                <div class="form-group col mb-3">
+                    <label asp-for="TelGestor">Celular do Gestor</label>
+                    <input asp-for="TelGestor" class="form-control" maxlength="11" onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col mb-3">
+                    <label asp-for="Password">Senha</label>
+                    <input asp-for="Password" type="password" class="form-control" required />
+                </div>
+                <div class="form-group col mb-3">
+                    <label name="PasswordCheck">Confirme a senha</label>
+                    <input name="PasswordCheck" type="password" class="form-control" required />
+                </div>
+            </div>
+
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="aceites" name="aceites" checked onclick="aceite(this)">
+                <input type="hidden" name="aceitesValues" value="true" />
+                <label class="form-check-label" for="aceites">
+                    Aceito e concordo com a <a asp-controller="Cadastro" asp-action="PoliticaPrivacidade" target="_blank">Política de Privacidade</a> e o <a asp-controller="Cadastro" asp-action="TermoResponsabilidade" target="_blank">Termo de Responsabilidade</a>.
+                </label>
+            </div>
+
+            <input type="hidden" name="UserType" value="TestUser" />
+            <button type="submit" class="w-100 btn btn-primary btn-lg mt-2" name="criar">Criar conta para versão Trial</button>
+
+            <div class="col-12">
+                <div asp-validation-summary="All" class="text-danger"></div>
+            </div>
+
+    </div>
+    </div>
+
+    </form>
+
+</div>
+
+<script>
+    function aceite(elem){
+        $("[name='criar']").prop("disabled", !elem.checked);
+        $("[name='aceitesValues']").prop("value", elem.checked);
+    }
+</script>

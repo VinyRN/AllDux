@@ -1,0 +1,18 @@
+﻿@using System.Linq;
+@using alldux_plataforma.Models;
+@model User;
+
+@{
+    ViewData["Title"] = "Agora falta pouco";
+}
+
+<div class="container">
+
+    <div class="mt-5 px-4 pt-5 pb-3 text-center">
+        <h1 class="display-5 fw-bold pt-4">@ViewData["Title"] @TempData["UserName"]</h1>
+        <div class="col-lg-6 mx-auto">Seus dados estão sendo avaliados por nossa equipe e, em alguns minutos, você receberá um e-mail com a liberação do seu acesso. O acesso na versão Trial tem duração de 15 dias. Aproveite!</div>
+    </div>
+
+    @* <div class="col-lg-6 mx-auto"><a asp-controller="Account" asp-action="Login">Retro.</a></div> *@
+
+</div>

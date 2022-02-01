@@ -1,0 +1,62 @@
+@model IEnumerable<Faq>
+
+@{
+    ViewData["Title"] = "Ajuda";
+}
+
+<div class="row">
+  <div class="container mt-3">
+    <div class="d-flex text-end" id="buttom-panel" style="float: right;">
+        @if(this.User.IsInRole("Admin"))
+        {
+          <a asp-controller="Faq" asp-action="Adicionar" class="btn bt-lg btn-primary">Incluir Pergunta</a>
+        }
+      </div>
+    <nav aria-label="breadcrumb d-flex text-start">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Ajuda</li>
+      </ol>
+    </nav>
+    
+  </div>
+
+  @{await Html.RenderPartialAsync("_AlertPartial");}
+
+  <div class="container mb-2 text-center">
+    <h1 class="display-5 fw-bold">@ViewData["Title"]</h1>
+     <div class="col-lg-11 mx-auto">
+      <p class="lead mb-4">
+        Essa área alimenta a página de <a asp-controller="Account" asp-action="Ajuda">Ajuda</a>. As perguntas e respostas cadastradas aqui serão exibidas lá.
+      </p>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-lg-12">
+
+    <div class="table-responsive">
+    <table class="table table-hover padronizacao-insumos" id="Faq">
+      <thead>
+        <tr>
+           <th>Pergunta</th>
+           <th>Resposta</th>            
+        </tr>
+      </thead>
+      <tbody>
+        @foreach (var item in Model)
+        {
+        <tr onclick="window.location='/Faq/Editar/@item.Id.ToString()'">
+          <td>@Html.Raw(item.Pergunta.Replace("color:#1155CC", ""))</td>
+          <td>@Html.Raw(item.Resposta.Replace("color:#1155CC", ""))</td>          
+        </tr>
+        }
+      </tbody>
+    
+    </table>
+    </div>
+
+  </div>
+</div>

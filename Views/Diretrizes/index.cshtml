@@ -1,0 +1,145 @@
+@model IEnumerable<DiretrizesClinicas>
+
+@{
+    ViewData["Title"] = "Diretrizes Clínicas";
+}
+
+<div class="row">
+  <div class="container mt-3">
+    <div class="d-flex text-end" id="buttom-panel" style="float: right;">
+        @if(this.User.IsInRole("Admin"))
+        {
+          <a asp-controller="Diretrizes" asp-action="Adicionar" class="btn bt-lg btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
+  <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+</svg> Adicionar Diretriz</a>
+        }
+    </div>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+      </ol>
+    </nav>
+  </div>
+
+@{await Html.RenderPartialAsync("_AlertPartial");}
+  
+<div class="px-4 pt-4 text-center">
+    <h1 class="display-5 fw-bold">@ViewData["Title"]</h1>
+    <div class="col-lg-6 mx-auto">
+      <p class="lead mb-4">
+        Coletânea de protocolos clínicos e precificados para auxiliar no melhor desfecho clínico com base na redução de custo e aumento da lucratividade.
+      </p>
+    </div>
+
+<div class="row">
+  <div class="col-6">
+      <ul class="text-start m-auto lead mb-5">
+        <li>Base regulatória - Rol da ANS + Bula de Medicamentos. </li>
+        <li>Referências científicas - Estudos Fase 3 com ganho de sobrevida.</li>
+        <li>Metanálise de estudos diagnósticos.</li>
+      </ul>
+  </div>
+  <div class="col-6">
+          <ul class="text-start m-auto lead mb-5">
+        <li>Diretrizes da National Comprehensive Cancer Network - NCCN.</li>
+        <li>Descrição de premissas para padronização de doses: <br />Estudo sobre peso, altura e área da superfície corporal.</li>
+      </ul>
+  </div>
+</div>
+
+<div class="container text-center d-none d-md-block">
+  @if (ViewBag.categorias != null)
+  {
+      <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+          <input type="radio" class="btn-check" name="btnradio" id="todas" autocomplete="off" checked onclick="filtraCategoria('')">
+          <label class="btn btn-outline-primary" for="todas">TODAS</label>
+      @foreach (var item in ViewBag.categorias)
+      {
+        @if(!String.IsNullOrEmpty(item)){
+          <input type="radio" class="btn-check" name="btnradio" id="@item" autocomplete="off" onclick="filtraCategoria('@item')">
+          <label class="btn btn-outline-primary" for="@item">@item</label>
+        }
+      } 
+      </div>  
+  }
+</div>
+
+<div class="container px-4 pt-5">
+    <div class="card bg-light">
+      <div class="card-body row">
+         
+         <div class="col-6 m-auto">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="busca-diretrizes" placeholder="" value="">
+            <label for="busca-diretrizes">Encontre uma diretriz</label>
+          </div>
+        </div>
+
+      </div><!-- card-body -->
+    </div><!-- card -->
+</div>
+
+<div class="container px-4 py-5" id="icon-grid">
+    
+    <div class="row diretrizRow" data-masonry='{"percentPosition": true }'>
+      
+    @foreach (DiretrizesClinicas item in Model)
+    {
+      <div class="col-sm-6 col-lg-4 mb-4 diretriz" data-categoria='@item.Categoria'>
+        <div class="card text-center">
+            <div class="card-header">
+              @item.Categoria
+            </div>
+
+          <div class="card-body">
+            @if(item.Titulo.Length > 90){
+            <h6 class="card-title card-diretriz-titulo">@item.Titulo</h6>
+            }else{
+              <h5 class="card-title card-diretriz-titulo">@item.Titulo</h5>
+            }
+            <div class="px-4">
+              @if (User.HasClaim("Content_DiretrizesClinicas", "True")){
+                @if(this.User.IsInRole("TestUser") && !ViewBag.protocolosLivres.Contains(item.Id.ToString())){
+                  <button type="button" class="btn btn-sm btn-outline-dark my-2" disabled data-toggle="tooltip" data-placement="top" title="Não disponível para usuário Trial">Diretrizes Clínicas</button>
+                }else{
+                  <a class="btn btn-sm btn-outline-secondary my-2" asp-controller="DiretrizesClinicas" asp-action="" asp-route-id="@item.Id">Diretrizes Clínicas</a>
+                }
+              }
+
+              @if (User.HasClaim("Content_DiretrizesPrecificadas", "True")){
+                @if(ViewBag.precificadas.Contains(item.Id.ToString().ToUpper())){
+                  
+                  @if(this.User.IsInRole("TestUser") && !ViewBag.protocolosLivres.Contains(item.Id.ToString())){
+                  <button type="button" class="btn btn-sm btn-outline-dark ms-3 my-2" disabled data-toggle="tooltip" data-placement="top" title="Não disponível para usuário Trial">Diretrizes Precificadas</button>
+                  }else{
+                  <a class="btn btn-sm btn-outline-secondary ms-3 my-2" asp-controller="DiretrizesPrecificadas" asp-action="Exibir" asp-route-id="@item.Id.ToString()">Diretrizes Precificadas</a>
+                  }
+
+                }else{
+                  @if(this.User.IsInRole("Admin")){
+                  <a class="btn btn-sm btn-outline-success ms-3 my-2" asp-area="" asp-controller="DiretrizesPrecificadas" asp-action="Adicionar" asp-route-id="@item.Id.ToString()">+ Precificadas</a>
+                  }
+                }
+              }
+            </div>
+            <p class="card-text text-center mt-2"><small class="text-muted">
+              @if(this.User.IsInRole("TestUser") && !ViewBag.protocolosLivres.Contains(item.Id.ToString())){
+                <span>Não disponível para usuário Trial. </span>
+
+              }else{
+                @if(item.LastUpdate == DateTime.MinValue){
+                  <span>Atualizado em: </span>@item.CreateDate
+                }else{
+                  <span>Atualizado em: </span>@item.LastUpdate
+                }
+              }
+            </small></p>
+          </div>
+        </div>
+      </div>
+    }
+
+  </div>
+</div>

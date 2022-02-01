@@ -1,0 +1,270 @@
+﻿@using alldux_plataforma.Models;
+
+@model FornecedoresProduto
+
+
+@{ ViewData["Title"] = "Editar Medicamento "; }
+
+
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+
+        @{await Html.RenderPartialAsync("_MenuHubPartial");}
+
+        <div class="col py-3" style="margin-left:20px;">
+
+
+            <div class="row flex-nowrap">
+                <div class="col-12 col-sm-12 text-start">
+                    <div class="container-fluid mt-3 px-0">
+                        <nav aria-label="breadcrumb d-flex text-start">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a asp-area="" asp-controller="Produto" asp-action="Index">Produto</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row flex-nowrap">
+                <div class="col-12 text-start">
+
+                    <div class="row mb-3 mt-3">
+                        <div class="col-12 col-sm-12 text-start">
+                            @{await Html.RenderPartialAsync("_AlertPartial");}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row flex-nowrap">
+                <div class="col-12 text-start">
+
+                    <form asp-controller="FornecedorProduto" asp-action="EditarMedicamento" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden" asp-for="Tipo" />
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="MedicamentoId" />
+                        <input type="hidden" asp-for="MedicamentoVariacaoId" />
+                        <input type="hidden" asp-for="UserId" />
+                        <input type="hidden" asp-for="FreteId" />
+                        <input type="hidden" asp-for="AproveId" />
+                        <input type="hidden" asp-for="CreateDate" />
+                        <input type="hidden" asp-for="CreateUser" />
+                        <input type="hidden" asp-for="LastUpdateUser" />
+                        <input type="hidden" asp-for="StatusEdit" />
+
+
+                        @if (Model.UserId.Trim() == "")
+                        {
+                            <input type="hidden" asp-for="DataDisponivelAllDux" />
+                        }
+
+                        <div class="row mb-3 mt-3">
+
+                            @if (Model != null)
+                            {
+
+                                <div class="col-12 col-sm-6 text-start">
+                                    <div class="form-group">
+                                        <label class="control-label">Principio Ativo</label>
+                                        <input name="PrincipioAtivo" class="form-control" value="@Model.PrincipioAtivo" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-6 text-start">
+                                    <div class="form-group">
+                                        <label class="control-label">Nome</label>
+                                        <input name="Nome" class="form-control" value="@Model.Nome" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-6 text-start">
+                                    <div class="form-group">
+                                        <label class="control-label">Apresentação</label>
+                                        <input name="Apresentacao" class="form-control" value="@Model.Apresentacao" readonly />
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-6 text-start">
+                                    <div class="form-group">
+                                        <label class="control-label">Laboratório</label>
+                                        <input name="Nome" class="form-control" value="@Model.Laboratorio" readonly />
+                                    </div>
+                                </div>
+
+
+                                <div class="col-12 col-sm-12 text-start">
+                                    <hr />
+                                </div>
+
+                                <div class="col-12 col-sm-8 text-start">
+                                    <div class="form-group">
+                                        <label class="control-label">Fornecedor</label>
+
+                                        @if (Model.UserId.Trim() != "")
+                                        {
+                                            <select class="form-select form-select mb-3" asp-for="IdFornecedor" id="IdFornecedor" name="IdFornecedor" required disabled>
+                                                <option value="">Selecione o Fornecedor</option>
+                                                <option value="@Model.UserId" selected>@Model.NomeFornecedor</option>
+                                            </select>
+
+                                        }
+                                        else
+                                        {
+                                            <select class="form-select form-select mb-3" asp-for="IdFornecedor" id="IdFornecedor" name="IdFornecedor" required>
+                                                <option value="" selected>Selecione o Fornecedor</option>
+                                                @foreach (Fornecedores ObjFornecedor in ViewBag.ListaFornecedores)
+                                                {
+                                                    <option value="@ObjFornecedor.IdFornecedor">@ObjFornecedor.NomeFantasia</option>
+                                                }
+                                            </select>
+                                        }
+
+                                        <span asp-validation-for="IdFornecedor" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-4 text-start">
+                                    <div class="form-group">
+                                        <label class="control-label">Status</label>
+
+                                        @if (Model.UserId.Trim() != "")
+                                        {
+                                            <select asp-for="Status" class="form-select form-select mb-3" id="Status" name="Status" required disabled>
+
+                                                <option value="">Selecione o Status</option>
+                                                @if (Model.Status == 1)
+                                                {
+                                                    <option value="1" selected>Aguardando Aprovação</option>
+                                                    <option value="2">Aprovado</option>
+                                                    <option value="3">Cancelado</option>
+                                                }
+                                                else if (Model.Status == 2)
+                                                {
+                                                    <option value="1">Aguardando Aprovação</option>
+                                                    <option value="2" selected>Aprovado</option>
+                                                    <option value="3">Cancelado</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="1">Aguardando Aprovação</option>
+                                                    <option value="2">Aprovado</option>
+                                                    <option value="3" selected>Cancelado</option>
+                                                }
+
+                                            </select>
+
+                                        }
+                                        else
+                                        {
+                                            <select asp-for="Status" class="form-select form-select mb-3" id="Status" name="Status" required>
+                                                <option value="" selected>Selecione o Status</option>
+                                                <option value="1">Aguardando Aprovação</option>
+                                                <option value="2">Aprovado</option>
+                                                <option value="3">Cancelado</option>
+                                            </select>
+
+                                        }
+                                        <span asp-validation-for="Status" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-2 text-start">
+                                    <div class="form-group">
+                                        <label class="control-label">Lote</label>
+                                        <input asp-for="Lote" type="text" class="form-control" id="Lote" nome="Lote" placeholder="" value=@Model.Lote required>
+                                        <span asp-validation-for="Lote" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-1 text-start">
+                                    <div class="form-group">
+                                        <label class="control-label">Estoque</label>
+                                        <input asp-for="Estoque" type="text" class="form-control" id="Estoque" nome="Estoque" placeholder="" value=@Model.Estoque required>
+                                        <span asp-validation-for="Estoque" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-3 text-start">
+                                    <div class="form-group">
+                                        <label class="control-label">Data Disponível</label>
+                                        <div id="sandbox-container">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text" id="basic-addon1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-range" viewBox="0 0 16 16">
+                                                        <path d="M9 7a1 1 0 0 1 1-1h5v2h-5a1 1 0 0 1-1-1zM1 9h4a1 1 0 0 1 0 2H1V9z" />
+                                                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+                                                    </svg>
+                                                </span>
+                                                <input type="text" asp-for="DataDisponivel" id="DataDisponivel" name="DataDisponivel" class="form-control" value=@Model.DataDisponivel>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-3 text-start">
+                                    <div class="form-group">
+                                        <label class="control-label">Data Indisponível</label>
+                                        <div id="sandbox-container">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text" id="basic-addon1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-range" viewBox="0 0 16 16">
+                                                        <path d="M9 7a1 1 0 0 1 1-1h5v2h-5a1 1 0 0 1-1-1zM1 9h4a1 1 0 0 1 0 2H1V9z" />
+                                                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+                                                    </svg>
+                                                </span>
+                                                <input type="text" asp-for="DataIndisponivel" id="DataIndisponivel" name="DataIndisponivel" class="form-control" value=@Model.DataIndisponivel>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                @if (Model.UserId.Trim() == "")
+                                {
+                                    <div class="col-12 col-sm-3 text-start">
+                                        <div class="form-group">
+                                            <label class="control-label">Data Disponível AllDux</label>
+                                            <div id="sandbox-container">
+                                                <div class="input-group mb-3">
+                                                    <span class="input-group-text" id="basic-addon1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-range" viewBox="0 0 16 16">
+                                                            <path d="M9 7a1 1 0 0 1 1-1h5v2h-5a1 1 0 0 1-1-1zM1 9h4a1 1 0 0 1 0 2H1V9z" />
+                                                            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+                                                        </svg>
+                                                    </span>
+                                                    <input type="text" asp-for="DataDisponivelAllDux" id="DataDisponivelAllDux" name="DataDisponivelAllDux" class="form-control" value=@Model.DataDisponivelAllDux>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="col-12 col-sm-12 text-start">
+                                    <div class="form-group">
+                                        <label class="control-label">Observação</label>
+                                        <textarea asp-for="Observacoes" name="Observacoes" id="Observacoes" style="width:100%; height:100px; display:block;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-12 text-start">
+                                    <div class="mt-1 pt-1 pb-1">
+                                        <button type="submit" class="btn btn-primary">Salvar</button>
+                                    </div>
+                                </div>
+
+                            }
+
+
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

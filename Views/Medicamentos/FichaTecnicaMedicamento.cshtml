@@ -1,0 +1,140 @@
+﻿@model MedicamentoVariacao
+
+@{
+    ViewData["Title"] = "Ficha Técnica Medicamento";
+}
+
+@functions{
+    public string isChecked(bool prop)
+    {
+        if (prop)
+        {
+            return "checked";
+        }
+        return "";
+    }
+
+}
+
+<div class="modal-header">
+    <h4 class="modal-title">@ViewData["Title"]</h4>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col mb-3">
+            <label>Principio Ativo</label>
+            <input type="text" asp-for="Medicamento.PrincipioAtivo" class="form-control" readonly />
+        </div>
+        <div class="col mb-3">
+            <label>Descrição Curta</label>
+            <input type="text" asp-for="Medicamento.DescricaoCurta" class="form-control" readonly />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mb-3">
+            <label>Descrição longa</label>
+            <input type="text" asp-for="Medicamento.Descricao" class="form-control" readonly />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col mb-3">
+            <label>Nome</label>
+            <input type="text" asp-for="Nome" class="form-control" readonly />
+        </div>
+        <div class="col mb-3">
+            <label>TISS</label>
+            <input type="text" asp-for="TISS" class="form-control" readonly />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mb-3">
+            <label>Laboratório</label>
+            <input type="text" asp-for="Laboratorio" class="form-control" readonly />
+        </div>
+        <div class="col mb-3">
+            <label>Distribuidor</label>
+            <input type="text" asp-for="Distribuidor" class="form-control" readonly />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mb-3">
+            <label>Tipo</label>
+            <input type="text" asp-for="Tipo" class="form-control" readonly />
+        </div>
+        <div class="col mb-3">
+            <label>Família</label>
+            <input type="text" asp-for="Familia" class="form-control" readonly />
+        </div>
+        <div class="col mb-3">
+            <label>Classe</label>
+            <input type="text" asp-for="Classe" class="form-control" readonly />
+        </div>
+        <div class="col mb-3">
+            <label>Subclasse</label>
+            <input type="text" asp-for="Subclasse" class="form-control" readonly />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mb-3">
+            <label>Quantidade</label>
+            <div class="input-group mb-3">
+                <input type="text" asp-for="UnMedida" class="form-control" readonly />
+                <input type="text" asp-for="UnMedidaTipo" class="form-control" readonly />
+            </div>
+        </div>
+        <div class="col mb-3">
+            <label>Posologia</label>
+            <div class="input-group mb-3">
+                <input type="text" asp-for="UnApresentacao" class="form-control" readonly />
+                <input type="text" asp-for="UnApresentacaoTipo" class="form-control" readonly />
+            </div>
+        </div>
+        <div class="col mb-3">
+            <label>Preço Mercado</label>
+            <div class="input-group mb-3">
+                <span class="input-group-text">R$</span>
+                <input type="text" asp-for="PrecoMercado" class="form-control" readonly />
+            </div>
+        </div>
+        <div class="col mb-3">
+            <label>Preço Alldux</label>
+            <div class="input-group mb-3">
+                <span class="input-group-text">R$</span>
+                <input type="text" asp-for="PrecoAlldux" class="form-control" readonly />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mb-3">
+            <div class="form-check form-switch">
+                <input class="form-check-input btn-lg" type="checkbox" asp-for="Padronizado" disabled />
+                <label class="form-check-label" for="Generico">Padronizado</label>
+            </div>
+        </div>
+        <div class="col mb-3">
+            <div class="form-check form-switch">
+                <input class="form-check-input btn-lg" type="checkbox" asp-for="Generico" disabled />
+                <label class="form-check-label" for="Generico">Genérico</label>
+            </div>
+        </div>
+        <div class="col mb-3">
+            <div class="form-check form-switch">
+                <input class="form-check-input btn-lg" type="checkbox" asp-for="Biossimilar" disabled />
+                <label class="form-check-label" for="Generico">Biossimilar</label>
+            </div>
+        </div>
+        <div class="col mb-3">
+            <div class="form-check form-switch">
+                <input class="form-check-input btn-lg" type="checkbox" asp-for="Referencia" disabled />
+                <label class="form-check-label" for="Generico">Referência</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+</div>

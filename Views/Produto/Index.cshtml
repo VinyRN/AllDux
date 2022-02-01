@@ -1,0 +1,87 @@
+﻿@using alldux_plataforma.Models;
+@using alldux_plataforma.Models.Enums;
+
+@model ProdutoHubViewModels;
+
+
+@{ ViewData["Title"] = "Consulta de Produtos"; }
+
+
+<div class="container-fluid">
+
+    <div class="row flex-nowrap">
+
+        @{await Html.RenderPartialAsync("_MenuHubPartial");}
+
+        <div class="col py-3" style="margin-left:20px;">
+
+            <div class="row flex-nowrap">
+                <div class="col-12 col-sm-12 text-start">
+                    <div class="container-fluid mt-3 px-0">
+                        <nav aria-label="breadcrumb d-flex text-start">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row flex-nowrap">
+                <div class="col-12 text-start">
+
+                    <div class="row mb-3 mt-3">
+                        <div class="col-12 col-sm-12 text-start">
+                            @{await Html.RenderPartialAsync("_AlertPartial");}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row flex-nowrap">
+                <div class="col-12 text-start">
+
+                    <form asp-controller="Produto" asp-action="Produtos" method="post">
+
+                        @Html.AntiForgeryToken()
+                        <div class="row mb-3 mt-3">
+                            <div class="col-12 col-sm-4 text-start">
+                                <div class="form-group">
+                                    <label class="control-label">Tipo</label>
+                                    <select class="form-select form-select mb-3" asp-for="objPrduto.Tipo" id="Tipo" name="Tipo" required>
+                                        <option value="" selected>Selecione o Tipo</option>
+                                        <option value="1">Medicamento</option>
+                                        <option value="2">Material</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="col-12 col-sm-8 mb-3">
+                                <div class="form-group">
+                                    <label class="control-label">Descrição</label>
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" id="NomeFind" name="NomeFind" maxlength="20" required />
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-secondary" type="submit">Pesquisar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br />
+                            <hr />
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+

@@ -1,0 +1,173 @@
+@model Negociacao
+
+@{
+    ViewData["Title"] = "Adicionar Negociação";
+    var i = 0;
+}
+
+<div class="row">
+  <div class="container mt-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Dashboard</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Negociacoes" asp-action="Index">Negociações</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="container mb-2">
+    <h1>@ViewData["Title"]</h1>
+  </div>
+</div>
+
+<form method="post">
+  <input type="hidden" asp-for="Id" />
+  <div class="row">
+      <div class="col-10 text-start">
+
+        <div class="row">
+          <div class="col mb-3">
+            <label asp-for="Titulo">Titulo</label>
+            <input asp-for="Titulo" class="form-control" />
+          </div>
+          <div class="form-group mb-3">
+            <label asp-for="Parceiro">Nome do Parceiro</label>
+            <input asp-for="Parceiro" class="form-control" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <div class="mb-3 col">
+                <label>Data de início</label>
+                <div id="sandbox-container">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-range" viewBox="0 0 16 16">
+                        <path d="M9 7a1 1 0 0 1 1-1h5v2h-5a1 1 0 0 1-1-1zM1 9h4a1 1 0 0 1 0 2H1V9z"/>
+                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+                      </svg>
+                    </span>
+                    <input type="text" asp-for="DataInicio" class="form-control">
+                  </div>
+                </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="mb-3 col">
+                <label>Data de encerramento</label>
+                <div id="sandbox-container">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-range" viewBox="0 0 16 16">
+                        <path d="M9 7a1 1 0 0 1 1-1h5v2h-5a1 1 0 0 1-1-1zM1 9h4a1 1 0 0 1 0 2H1V9z"/>
+                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+                      </svg>
+                    </span>
+                    <input type="text" asp-for="DataFim" class="form-control">
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div><!-- row -->
+
+        <div class="row">
+          <div class=" col mb-3">
+              <label asp-for="DestaqueLongo">Destaque longo</label>
+              <input asp-for="DestaqueLongo" class="form-control" maxlength="60" />
+          </div>
+          <div class=" col mb-3">
+              <label asp-for="DestaqueCurto">Destaque palavra</label>
+              <input asp-for="DestaqueCurto" class="form-control" maxlength="12" />
+          </div>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Texto">Texto explicativo</label>
+            <textarea asp-for="Texto" name="Texto" id="negociacao-texto" style="width:100%; height:100px; display:block;"></textarea>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Obs">Observações</label>
+            <textarea name="Obs" id="negociacao-obs" style="width:100%; height:100px; display:block;">
+                - Os valores publicados são para alíquota de ICMS de 18%, e consequentemente, irão variar por estado; <br /><br />
+
+                - Produtos sujeitos à disponibilidade de estoque e com faturamento mínimo na data de confirmação da compra; <br /><br />
+
+                - O ALLDUX não realiza a compra dos medicamentos, que deverá ser feita diretamente com os distribuidores indicados para cada ítem; <br /><br />
+
+                - Para fins de cadastro, o cliente interessado na aquisição dos medicamentos deverá seguir o procedimento padrão de cada distribuidor (envio de documentação, análise de crédito, entre outros);<br /><br />
+
+                - Caso o cliente solicite, o ALLDUX poderá auxiliar em eventuais melhorias de condições comerciais, tais como: faturamento mínimo e prazos de pagamento e entrega. <br /><br />
+
+                - O ALLDUX realiza, periodicamente, pesquisas de mercado. Os valores publicados refletem os melhores preços de distribuidores qualificados por nossa equipe de especialistas;<br /><br />
+
+                - O ALLDUX, para fins de indicação de laboratórios e medicamentos, adota as seguintes premissas:<br />
+
+                <ul>
+                    <li>Laboratórios registrados na ANVISA</li><br />
+                    <li>Distribuidores credenciados pelos laboratórios</li><br />
+                    <li>Preferência a medicamentos genéricos e biossimilares (na ausência desses, indicação do medicamento de referência)</li><br /><br />
+                </ul>
+
+                - O ALLDUX não possui nenhum vínculo com os laboratórios nem distribuidores indicados. Estamos sempre em avaliação contínua do mercado para identificarmos as melhores condições comerciais aos nossos clientes.<br /><br />
+
+                - Para maiores informações, entre em contato através do e-mail: <a href="mailto:suprimentos@alldux.com.br" target="_blank">suprimentos@alldux.com.br</a>.
+            </textarea>
+        </div>
+
+        <div id="medicamentos-container" style="padding-bottom: 60px;">
+          <h4>Itens da negociação</h4>
+      
+          <div id="itens table-responsive">
+            <table class="table table-hover padronizacao-insumos" id="TabelaMedicamentosNegociacoes">
+              <thead>
+                <tr>
+                  <th>X</th>
+                  <th>Nome - Princ. Ativo</th>
+                  <th>Laboratório</th>
+                  <th>Distribuidor</th>
+                  <th>Preço de mercado</th>
+                  <th>Preço da negociação</th>
+                </tr>
+              </thead>
+              <tbody>
+                   @foreach (var item in ViewBag.ListaMedicamentos)
+                    {
+                      @foreach (var variacao in item.Variacoes)
+                      {
+                    <tr data-bs-toggle="tooltip" data-bs-placement="top" title="@item.DescricaoCurta">
+                      <td>
+                        <div class="form-check form-switch mx-auto">
+                            <input class="form-check-input btn-lg" type="checkbox" id="Padronizado" onclick="negociacaoItem_CarregaId(this, 'NegociacaoItem[@i].MedicamentoId','@variacao.Id')" />
+                            <input type="hidden" name="NegociacaoItem[@i].MedicamentoId" id="NegociacaoItem[@i].MedicamentoId" value="" />
+                        </div>
+                      </td>
+                      <td>@variacao.Nome  - @item.PrincipioAtivo @variacao.UnApresentacao @variacao.UnApresentacaoTipo / @variacao.UnMedida @variacao.UnMedidaTipo</td>
+                      <td>@variacao.Laboratorio</td>
+                      <td>@variacao.Distribuidor</td>
+                      <td>R$ @variacao.PrecoMercado</td>
+                      <td>
+                        <div class="input-group">
+                          <span class="input-group-text">R$</span>
+                          <input type="text" name="NegociacaoItem[@i].PrecoDesconto" class="form-control" value="@variacao.PrecoAlldux" />
+                        </div>
+                      </td>
+                    </tr><!-- @(i++) -->
+                      }
+                    }
+              </tbody>
+            </table>
+          </div><!-- itens -->
+
+        </div><!-- medicamentos-container -->
+
+        <div class="container">
+          <button type="submit" class="btn btn-primary my-2">Criar Negociação</button>
+        </div>
+
+      </div>
+  </div>
+</form>

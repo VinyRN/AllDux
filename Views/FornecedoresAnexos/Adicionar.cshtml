@@ -1,0 +1,118 @@
+﻿
+@model FornecedoresAnexos
+
+@{
+    ViewData["Title"] = "Anexar Documentos Fornecedor";
+}
+
+
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+
+        @{await Html.RenderPartialAsync("_MenuHubPartial");}
+
+        <div class="col py-3" style="margin-left:20px;">
+
+
+            <div class="row flex-nowrap">
+                <div class="col-12 col-sm-12 text-start">
+                    <div class="container-fluid mt-3 px-0">
+                        <nav aria-label="breadcrumb d-flex text-start">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a asp-controller="FornecedoresAnexos" asp-action="Anexo" asp-route-id="@Model.IdFornecedor">Anexos</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row flex-nowrap">
+                <div class="col-12 text-start">
+
+                    <div class="row mb-3 mt-3">
+                        <div class="col-12 col-sm-12 text-start">
+                            @{await Html.RenderPartialAsync("_AlertPartial");}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row flex-nowrap">
+                <div class="col-12 text-start">
+
+                    <div class="row mb-3 mt-3">
+
+                        <div class="col-12 col-sm-3 text-start">
+                            <div class="form-group">
+                                <label asp-for="CNPJ">CNPJ</label>
+                                <input asp-for="CNPJ" class="form-control" maxlength="14" readonly />
+                                <span asp-validation-for="CNPJ" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-9 text-start">
+                            <div class="form-group">
+                                <label asp-for="NomeFantasia">Nome Fantasia</label>
+                                <input asp-for="NomeFantasia" class="form-control" maxlength="200" readonly />
+                                <span asp-validation-for="NomeFantasia" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row mb-3 mt-3">
+                        <div class="col-12">
+                            <hr />
+                        </div>
+                    </div>
+
+                    <form enctype="multipart/form-data" asp-controller="FornecedoresAnexos" asp-action="Adicionar" method="post">
+                        @Html.AntiForgeryToken()
+
+
+                        <input type="hidden" asp-for="IdFornecedor" />
+                        <input type="hidden" asp-for="CreatedUser" />
+                        <input type="hidden" asp-for="CreatedDate" />
+                        <input type="hidden" asp-for="LastUpdate" />
+                        <input type="hidden" asp-for="LastUpdateUser" />
+
+                        <div class="row mb-3 mt-3">
+                            <div class="col-12 col-sm-3 text-start">
+                                <div class="form-group">
+                                    <label asp-for="IdTipoDocumento">Tipo Documento</label>
+                                    <select class="form-select form-select mb-3" asp-for="IdTipoDocumento" id="IdTipoDocumento" name="IdTipoDocumento" required>
+                                        <option value="" selected>Selecione o Tipo</option>
+                                        @foreach (TiposDocFornecedores ObjTiposDoc in ViewBag.ListaTiposDocs)
+                                        {
+                                            <option value="@ObjTiposDoc.IdTipoDocumento">@ObjTiposDoc.DescrDocumento</option>
+                                        }
+                                    </select>
+
+                                    <span asp-validation-for="IdTipoDocumento" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-9 text-start">
+                                <div class="form-group">
+                                    <label asp-for="anexo" class="control-label">Arquivo</label>
+                                    <input asp-for="anexo" type="file" id="anexo" name="arquivo" class="form-control" required />
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-12 text-start">
+                                <div class="mt-1 pt-1 pb-1">
+                                    <button type="submit" class="btn btn-primary mt-3">Salvar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,98 @@
+﻿@model IEnumerable<Fornecedores>
+
+
+@{ ViewData["Title"] = "Lista de Fornecedores"; }
+
+<div class="container-fluid">
+
+    <div class="row flex-nowrap">
+
+        @{await Html.RenderPartialAsync("_MenuHubPartial");}
+
+        <div class="col py-3">
+
+            <div class="table-responsive">
+                <div class="container mt-3">
+                    <nav aria-label="breadcrumb d-flex text-start">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a asp-area="" asp-controller="Fornecedores" asp-action="Index">Fornecedores</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Lista de Fornecedore(s)</li>
+                        </ol>
+                    </nav>
+                </div>
+
+                @{await Html.RenderPartialAsync("_AlertPartial");}
+
+            </div>
+
+            <div class="table-responsive">
+                <div class="container mt-3">
+
+                    <table class="table table-hover padronizacao-insumos" id="Medicamentos">
+                        <thead style="text-align: justify">
+                            <tr>
+                                <th>CNPJ</th>
+                                <th>Razão Social</th>
+                                <th>Nome Fantasia</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody style="vertical-align: middle; text-align: justify;">
+
+                            @foreach (var ObjFornItem in Model)
+                            {
+                                <tr>
+                                    <td>@ObjFornItem.CNPJ</td>
+                                    <td>@ObjFornItem.RazaoSocial</td>
+                                    <td>@ObjFornItem.NomeFantasia</td>
+                                    <td>
+                                        <div class="btn-toolbar justify-content-center align-items-center">
+
+                                            <div class="btn-toolbar justify-content-center align-items-center">
+                                                <a asp-controller="Fornecedores" asp-action="Editar" asp-route-Id="@ObjFornItem.IdFornecedor.ToString()" data-toggle="tooltip" title="Editar"><i class="bi bi-pencil-square"></i></a>
+                                            </div>
+
+                                            <div class="btn-toolbar justify-content-center align-items-center">
+                                                <a asp-controller="FornecedoresAnexos" asp-action="Anexo" asp-route-Id="@ObjFornItem.IdFornecedor.ToString()" data-toggle="tooltip" title="Anexar" class="mx-2"><i class="bi bi-file-earmark-plus-fill"></i></a>
+                                            </div>
+
+                                            <div class="btn-toolbar justify-content-center align-items-center">
+                                                <a asp-controller="FornecedoresFormasPag" asp-action="FormasPagamento" asp-route-Id="@ObjFornItem.IdFornecedor.ToString()" data-toggle="tooltip" title="Formas de Pagamento"><i class="bi bi-clipboard-check"></i></a>
+                                            </div>
+
+                                            @if (ObjFornItem.Produtos.Count > 0)
+                                            {
+                                                <div class="btn-toolbar justify-content-center align-items-center">
+                                                    <a asp-controller="Fornecedores" asp-action="Produtos" asp-route-Id="@ObjFornItem.IdFornecedor.ToString()" data-toggle="tooltip" title="Meus Produtos" class="mx-2"><i class="bi bi-cart-check-fill"></i></a>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="btn-toolbar justify-content-center align-items-center">
+                                                    <a data-toggle="tooltip" title="Nenhum Produto Cadastrado" class="mx-2"><i class="bi bi-cart-check-fill"></i></a>
+                                                </div>
+
+                                            }
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+

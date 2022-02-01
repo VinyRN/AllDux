@@ -1,0 +1,79 @@
+@model IEnumerable<TNUMMLista>
+
+@{
+    ViewData["Title"] = "TNUMM";
+}
+
+<div class="row">
+  <div class="container mt-3">
+    <div class="d-flex text-end" id="buttom-panel" style="float: right;">
+        @if(this.User.IsInRole("Admin"))
+        {
+          <a asp-controller="Medicamentos" asp-action="TNUMMImport" class="btn bt-lg btn-primary">Importar Lista</a>
+        }
+      </div>
+    <nav aria-label="breadcrumb d-flex text-start">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Medicamentos" asp-action="Index">Medicamentos</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+      </ol>
+    </nav>
+    
+  </div>
+
+  @{await Html.RenderPartialAsync("_AlertPartial");}
+
+  <div class="container mb-2 text-center">
+    <h1 class="display-5 fw-bold">@ViewData["Title"]</h1>
+  </div>
+</div>
+
+<ul class="nav nav-tabs my-4">
+  <li class="nav-item">
+    <a class="nav-link" asp-controller="Medicamentos" asp-action="Index">Cadastro de Medicamentos</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" asp-controller="Medicamentos" asp-action="BrasindicePMC">Brasindice PMC</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" asp-controller="Medicamentos" asp-action="BrasindicePFB">Brasindice PFB</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="#">TNUMM</a>
+  </li>
+</ul>
+
+
+<div class="row">
+  <div class="col-lg-12">
+
+    <div class="table-responsive">
+    <table class="table table-hover padronizacao-insumos" id="Medicamentos">
+      <thead>
+        <tr>
+          <th>TISS</th>
+          <th>Código TNUMM</th>
+          <th>Nome</th>
+          <th>Detentor Registro Anvisa</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if(Model != null){
+          @foreach (var item in Model)
+          {
+            <tr>
+              <td>@item.TISS</td>
+              <td>@item.MedicamentoCod</td>
+              <td>@item.MedicamentoNome</td>
+              <td>@item.LaboratorioNome</td>
+            </tr>
+          }
+        }
+      </tbody>
+    
+    </table>
+    </div>
+
+  </div><!-- /conteudo -->
+</div><!-- row -->

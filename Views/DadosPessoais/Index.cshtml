@@ -1,0 +1,85 @@
+@using alldux_plataforma.Models;
+@inject UserManager<ApplicationUser> userManager;
+@model ApplicationUser
+
+@{
+    ViewData["Title"] = "Dados Pessoais";
+}
+
+<div class="row">
+    <div class="container mt-3 px-0">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Dados Pessoais</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="container mb-2 px-0">
+        <h1>Atualizar Dados Pessoais</h1>
+    </div>
+</div>
+
+<form asp-action="Update" method="post">
+
+    <div class="row">
+
+        <div class="col-6 text-start">
+                                              
+            <div class="form-group mb-3">
+                <label asp-for="UserName">Nome</label>
+                <input asp-for="UserName" class="form-control" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Email">E-mail</label>
+                <input asp-for="Email" class="form-control" readonly />
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="PhoneNumber">Telefone</label>
+                <input asp-for="PhoneNumber" class="form-control" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Company">Empresa</label>
+                <input asp-for="Company" class="form-control" readonly />
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Cargo">Cargo</label>
+                <input asp-for="Cargo" class="form-control" />
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="NomeGestor">Nome do Gestor</label>
+                <input asp-for="NomeGestor" class="form-control" />
+            </div>
+            
+            <div class="form-group mb-3">
+                <label asp-for="TelGestor">Telefone do Gestor</label>
+                <input asp-for="TelGestor" class="form-control" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="CreatedDate">Data de criação</label>
+                <input name="CreatedDate" class="form-control" readonly value="@Model.CreatedDate" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="password">Senha</label>
+                <input name="password" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Atualizar</button>
+
+        </div>
+
+        <div class="col-6">
+            <div asp-validation-summary="All" class="text-danger"></div>
+        </div>
+
+    </div>
+
+</form>

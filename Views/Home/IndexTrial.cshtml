@@ -1,0 +1,147 @@
+﻿@{
+    ViewData["Title"] = "ALLDUX Plataforma";
+}
+
+<div class="text-center position-relative">
+  <div class="d-flex position-absolute end-0 top-0 mt-3 me-2 text-end col-xs-6 col-md-2" id="buttom-panel" style="float: right; z-index:100;">
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="basic-addon1">Tempo restante</span>
+      <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1" value="@ViewBag.tempoRestanteTexto" readonly>
+    </div>
+  </div>
+</div>
+
+@if (!User.HasClaim("Aceite_PoliticaPrivacidade", "True")){
+  await Html.RenderPartialAsync("_ModalPartial");
+}
+
+<div id="DashboardCarrossel" class="carousel carousel-dark slide carousel-fade" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#DashboardCarrossel" data-bs-slide-to="0" class="active" aria-label="Slide 0" aria-current="true"></button>
+    <button type="button" data-bs-target="#DashboardCarrossel" data-bs-slide-to="1" aria-label="Slide 1" class=""></button>
+    <button type="button" data-bs-target="#DashboardCarrossel" data-bs-slide-to="2" aria-label="Slide 2" class=""></button>
+    <button type="button" data-bs-target="#DashboardCarrossel" data-bs-slide-to="3" aria-label="Slide 3" class=""></button>
+    <button type="button" data-bs-target="#DashboardCarrossel" data-bs-slide-to="4" aria-label="Slide 4" class=""></button>
+    <button type="button" data-bs-target="#DashboardCarrossel" data-bs-slide-to="5" aria-label="Slide 5" class=""></button>
+  </div>
+
+  <div class="carousel-inner">
+
+    <div class="carousel-item active" data-bs-interval="7000">
+      <div style="background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));" class="position-absolute w-100 h-100"></div>
+      <img src="/img/imagem_plataforma.jpg" border="0" alt="" />
+      <div class="carousel-caption d-none d-sm-block">
+        <h2>ALLDUX Plataforma</h2>
+        <p>Big data que usa inteligência artificial para dar sustentabilidade nas padronizações de insumos, como negociações de formas globais e garantia da qualidade, com coletâneas de diretrizes clínicas e o benefício dos protocolos médicos precificados. Todos os itens auxiliam na redução de custo e aumento na margem de lucratividade.</p>
+      </div>
+    </div>
+
+    <div class="carousel-item" data-bs-interval="4000">
+      <div style="background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));" class="position-absolute w-100 h-100"></div>
+      <img src="/img/imagem_plataforma.jpg" border="0" alt="" />
+      <div class="carousel-caption d-none d-sm-block">
+        <h2>Diretrizes Clínicas</h2>
+        <p>Conjunto de protocolos - Oncológico, Hematológico e de Radioterapia - estruturados por um board de especialistas, referenciados em literatura científica e atualizados periodicamente, a fim de garantir a qualidade assistencial e o melhor desfecho clínico.</p>
+      </div>
+    </div>
+
+    <div class="carousel-item" data-bs-interval="4000">
+      <div style="background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));" class="position-absolute w-100 h-100"></div>
+      <img src="/img/imagem_plataforma.jpg" border="0" alt="" />
+      <div class="carousel-caption d-none d-sm-block">
+        <h2>Diretrizes Precificadas</h2>
+        <p>Dispor de protocolos precificados permite que as instituições de saúde tenham maior controle de sua gestão financeira, conhecendo bem seus custos, assim como suas margens de lucro e de negociação.</p>
+      </div>
+    </div>
+    
+    <div class="carousel-item" data-bs-interval="4000">
+      <div style="background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));" class="position-absolute w-100 h-100"></div>
+      <img src="/img/imagem_plataforma.jpg" border="0" alt="" />
+      <div class="carousel-caption d-none d-sm-block">
+        <h2>Padronização de Insumos</h2>
+        <p>A padronização de insumos oferece, à área de Compras, valores de cotações de itens negociados, exclusivamente, para clientes ALLDUX. Além do controle de custos na aquisição, a ferramenta também contribui no controle de medicamentos em estoque.</p>
+      </div>
+    </div>
+    
+    <div class="carousel-item" data-bs-interval="4000">
+      <div style="background-image: linear-gradient(90deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));" class="position-absolute w-100 h-100"></div>
+      <img src="/img/imagem_plataforma.jpg" border="0" alt="" />
+      <div class="carousel-caption d-none d-sm-block">
+        <h2>Hub de Negociações</h2>
+        <p>O hub de negociações do ALLDUX traz, aos seus clientes, negociações de medicamentos com os melhores preços, orientando e facilitando a compra de insumos.</p>
+      </div>
+    </div>
+
+    <div class="carousel-item" data-bs-interval="4000">
+      <div style="background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));" class="position-absolute w-100 h-100"></div>
+      <img src="/img/imagem_plataforma.jpg" border="0" alt="" />
+      <div class="carousel-caption d-none d-sm-block">
+        <h2>Ferramenta de Análise de Custo</h2>
+        <p>As ferramentas trazem para o gestor a oportunidade de identificar os custos dos tratamentos oncológicos e prever sua margem de lucro.</p>
+      </div>
+    </div>
+
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#DashboardCarrossel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#DashboardCarrossel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+  <div class="row">
+    <div class="col-8 py-4 offset-2">
+      <div class="card mb-3 border-0">
+        <div class="row g-0">
+          <div class="col-md-3 text-center pt-4" style="color: gray;">
+           <img src="/img/user-quote.png" border=0 width="120" />
+          </div>
+          <div class="col-md-9">
+            <div class="card-body">
+              <h5 class="card-title"></h5>
+              <p class="card-text"><i>"A Plataforma é muito utilizada por nós, especialmente na consulta de preços e custos de protocolos. Agora é possível termos uma análise de custos acurada e confiável, o que nos possibilita ter tomadas de decisões assertivas."</i></p>
+              <p class="card-text"><small class="text-body"><strong>Maitê Kelly</strong><br /> Responsável pelo Centro de Oncologia da Unimed Ji-Paraná / Rondônia</small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container px-5 pb-5">
+    <div class="row g-4 row-cols-1 row-cols-lg-3">
+      <div class="col">
+        <div class="my-3 text-black-50 text-center">
+          <img src="/img/hub-de-negociacoes.png" border=0 width="100" />
+        </div>
+        <div class="col-8 offset-2 text-center">
+          <strong>Hub de Negociação</strong><br />
+          Redução média de 23% dos custos na aquisição de insumos.
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="my-3 text-black-50 text-center">
+          <img src="/img/padronizacao-insumos.png" border=0 width="100" />
+        </div>
+        <div class="col-8 offset-2 text-center">
+          <strong>Padronização de Protocolos</strong><br />
+            Reduz em torno de 20% o custo do tratamento.
+        </div>
+      </div>
+      <div class="col">
+        <div class="my-3 text-black-50 text-center">
+          <img src="/img/ferramenta-analise.png" border=0 width="100" />
+        </div>
+        <div class="col-8 offset-2 text-center">
+          <strong>Análise de Custos</strong><br />
+            Possibilita, ao gestor, analisar a margem e propor novos modelos de remuneração.
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  

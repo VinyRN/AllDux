@@ -1,0 +1,29 @@
+﻿@using System.Linq;
+@using alldux_plataforma.Models;
+@model User
+
+@{
+    ViewData["Title"] = "Termo de Responsabilidade";
+}
+
+<div class="container">
+
+    <div class="mt-5 px-4 pt-5 pb-3 text-center">
+        <h1 class="display-5 fw-bold">@ViewData["Title"]</h1>
+        <div class="col-lg-6 mx-auto"></div>
+    </div>
+
+
+    <div class="row">
+    <div class="col-8 offset-2 text-start">
+
+        <div class="text-justify">
+
+        <partial name="_TermoResponsabilidade" />
+
+        </div>
+
+    </div>
+    </div>
+
+</div>

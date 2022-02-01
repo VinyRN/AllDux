@@ -1,0 +1,62 @@
+﻿@model FornecedoresAnexos
+
+
+<div class="table-responsive">
+    <div class="container">
+
+        <table class="table table-hover padronizacao-insumos" id="Medicamentos">
+            <thead style="text-align: justify">
+                <tr>
+                    <th>Tipo Documento</th>
+                    <th>Anexo</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody style="vertical-align: middle; text-align: justify;">
+
+                @foreach (FornecedoresAnexos ObjAnexoItem in ViewBag.ListaAnexo)
+                {
+                    <tr>
+
+                        @if (ObjAnexoItem != null)
+                        {
+                            List<TiposDocFornecedores> ObjListTpDocs = new List<TiposDocFornecedores>();
+                            ObjListTpDocs = (List<TiposDocFornecedores>)ViewBag.ListaTiposDocs;
+
+                            TiposDocFornecedores ObjTipoDoc = new TiposDocFornecedores();
+
+                            ObjTipoDoc = ObjListTpDocs.Find(
+                                delegate (TiposDocFornecedores ItemTipoDoc)
+                                {
+                                    return ItemTipoDoc.IdTipoDocumento == ObjAnexoItem.IdTipoDocumento;
+                                }
+                            );
+
+                            <td>@ObjTipoDoc.DescrDocumento</td>
+
+                        }
+                        else
+                        {
+                            <td>N/A</td>
+                        }
+
+                        <td>@ObjAnexoItem.anexo</td>
+
+                        <td>
+                            <div class="btn-toolbar justify-content-center align-items-center">
+                                <div class="btn-toolbar justify-content-center align-items-center">
+                                    <a asp-controller="FornecedoresAnexos" asp-action="ViewAnexo" asp-route-Id="@ObjAnexoItem.IdAnexoFornecedor.ToString()" data-toggle="tooltip" title="View PDF" target="_blank"><i class="bi bi-file-earmark-pdf-fill"></i></a>
+                                </div>
+
+                                <div class="btn-toolbar justify-content-center align-items-center">
+                                    <a asp-controller="FornecedoresAnexos" asp-action="Excluir" asp-route-Id="@ObjAnexoItem.IdAnexoFornecedor.ToString()" data-toggle="tooltip" title="Excluir" class="mx-2"><i class="bi bi-trash-fill"></i></a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>

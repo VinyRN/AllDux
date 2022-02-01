@@ -1,0 +1,86 @@
+﻿@using alldux_plataforma.Models;
+@using alldux_plataforma.Models.Enums;
+
+@model Fornecedores;
+
+
+@{ ViewData["Title"] = "Consulta de Fornecedor"; }
+
+
+<div class="container-fluid">
+
+    <div class="row flex-nowrap">
+
+
+        @{await Html.RenderPartialAsync("_MenuHubPartial");}
+
+        <div class="col py-3" style="margin-left:20px;">
+
+            <div class="row flex-nowrap">
+                <div class="col-12 col-sm-12 text-start">
+                    <div class="container-fluid mt-3 px-0">
+                        <nav aria-label="breadcrumb d-flex text-start">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row flex-nowrap">
+                <div class="col-12 text-start">
+                    <div class="row mb-3 mt-3">
+                        <div class="col-12 col-sm-12 text-start">
+                            @{await Html.RenderPartialAsync("_AlertPartial");}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row flex-nowrap">
+                <div class="col-12 text-start">
+
+                    <form asp-controller="Fornecedores" asp-action="Fornecedores" method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <div class="row mb-3 mt-3">
+
+                            <div class="col-12 col-sm-4 text-start">
+                                <div class="form-group">
+                                    <label class="control-label">CNPJ</label>
+                                    <input asp-for="CNPJ" id="CNPJ" name="CNPJ" class="form-control" type="text" maxlength="14" />                                    
+                                    <span asp-validation-for="CNPJ" class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+                            <div class="col-12 col-sm-8 mb-3">
+                                <div class="form-group">
+                                    <label class="control-label">Nome Fantasia</label>
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" id="NomeFantasia" name="NomeFantasia" maxlength="200" />
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-secondary" type="submit">Pesquisar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br />
+                            <hr />
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+

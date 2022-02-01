@@ -1,0 +1,108 @@
+@model DiretrizesClinicas
+
+@{
+    ViewData["Title"] = "Diretrizes Clinicas";
+
+    string checaFlag(int n){
+      if(n == 0){
+        return "show";
+      }else{
+        return "";
+      }
+    }
+}
+
+<div class="row">
+  <div class="container mt-3 px-0">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Diretrizes" asp-action="Index">Diretrizes</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Diretrizes Clínicas</li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="container mb-4 px-0">
+    <h1 class="font-calibri">@Model.Titulo 
+      @if(this.User.IsInRole("Admin")){
+      <a class="btn btn-outline-danger btn-sm" asp-area="" asp-controller="DiretrizesClinicas" asp-action="Editar" asp-route-id="@Model.Id">Editar Diretriz</a>
+      }
+    </h1>
+    @if(!String.IsNullOrEmpty(Model.Lead)){
+      <p class="card-text">@Html.Raw(@Model.Lead)</p>
+    }
+  </div>
+</div>
+
+
+<div class="row font-calibri">
+  
+  <div class="col-lg-9">
+    <div>
+      @foreach (var itemModulo in Model.DiretrizModulo)
+      {          
+          <h3 id="item-@itemModulo.Index">@itemModulo.Titulo</h3>
+          @if(!String.IsNullOrEmpty(itemModulo.Conteudo))
+          {
+            <p>@Html.Raw(@itemModulo.Conteudo)</p>
+          }
+          
+          @foreach (var itemSecao in itemModulo.DiretrizSecao)
+          {
+            <h4 id="item-@itemModulo.Index-@itemSecao.Index">@itemSecao.Titulo</h4>
+            <p>@Html.Raw(@itemSecao.Conteudo)</p>
+
+            @if(!String.IsNullOrEmpty(itemSecao.Bibliografia))
+            {
+              <h5>Bibliografia:</h5>
+              <p class="fst-italic">
+                @itemSecao.Bibliografia
+              </p>
+            }
+
+            @if(!String.IsNullOrEmpty(itemSecao.Observacoes))
+            {
+              <p>@Html.Raw(@itemSecao.Observacoes)</p>
+            }
+            
+          }
+      }
+    </div>
+  </div><!-- /conteudo -->
+
+  <div class="col-lg-3 d-none d-lg-block" id="navbar-example3">
+    <!-- accordion -->
+    <div class="accordion" id="accordionExample" data-toggle="affix">
+
+      @foreach (var item in Model.DiretrizModulo)
+      {
+          <div class="accordion-item">
+          <h2 class="accordion-header" id="heading_@item.Index">
+            @if(item.Index == 0){
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_@item.Index" aria-expanded="true" aria-controls="collapse_@item.Index">
+              @item.Titulo
+            </button>
+            }else{
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_@item.Index" aria-expanded="true" aria-controls="collapse_@item.Index">
+              @item.Titulo
+            </button>
+            }
+          </h2>
+          <div id="collapse_@item.Index" class="accordion-collapse collapse @checaFlag(@item.Index)" aria-labelledby="heading_@item.Index" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <nav class="nav nav-pills flex-column">
+                <a class="nav-link ms-3 my-1" href="#item-@item.Index">@item.Titulo</a>
+                @foreach (var secao in item.DiretrizSecao)
+                {
+                    <a class="nav-link ms-3 my-1" href="#item-@item.Index-@secao.Index">@secao.Titulo</a>
+                }                
+              </nav>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+    <!-- accordion -->
+  </div>
+</div><!-- row -->

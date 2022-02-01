@@ -1,0 +1,205 @@
+@model Medicamento
+
+@{ ViewData["Title"] = "Editar Medicamento";
+                int i = 0; }
+
+@functions{ public string isChecked(bool prop)
+            {
+                if (prop)
+                {
+                    return "checked";
+                }
+                return "";
+            }
+
+            public string getValue(bool prop)
+            {
+                if (prop)
+                {
+                    return "true";
+                }
+                return "false";
+            } }
+<div class="row">
+    <div class="container mt-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Medicamentos" asp-action="Index">Medicamentos</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="container mb-2">
+        <h1>@ViewData["Title"]</h1>
+    </div>
+</div>
+
+<form method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="row">
+        <div class="col-10 text-start">
+
+            <div class="row">
+                <div class="col mb-3">
+                    <label asp-for="PrincipioAtivo">Principio Ativo</label>
+                    <input asp-for="PrincipioAtivo" class="form-control" />
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="DescricaoCurta">Descricao (curta)</label>
+                    <input asp-for="DescricaoCurta" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Descricao">Descricao (longa)</label>
+                <textarea asp-for="Descricao" name="Descricao" id="Textrea_Lead" style="width:100%; height:100px; display:block;"></textarea>
+            </div>
+
+            <div id="variacoes-container">
+                <h3>Variações</h3>
+                <div id="variacoes">
+                    @foreach (var item in Model.Variacoes)
+                    {
+        <div id="variacao_@i" class="variacao p-3 mb-2">
+            <div class="row">
+                <input type="hidden" name="Variacoes[@i].Id" value="@item.Id" />
+                <div class="col mb-3">
+                    <label name="Variacoes[@i].Nome">Nome</label>
+                    <input name="Variacoes[@i].Nome" class="form-control" value="@item.Nome" />
+                </div>
+                <div class="col mb-3">
+                    <label name="Variacoes[@i].TISS">TISS</label>
+                    <input name="Variacoes[@i].TISS" class="form-control" value="@item.TISS" />
+                </div>
+                <div class="col mb-3">
+                    <label name="Variacoes[@i].Laboratorio">Laboratorio</label>
+                    <input name="Variacoes[@i].Laboratorio" class="form-control" value="@item.Laboratorio" />
+                </div>
+                <div class="col mb-3">
+                    <label name="Variacoes[@i].Distribuidor">Distribuidor</label>
+                    <input name="Variacoes[@i].Distribuidor" class="form-control" value="@item.Distribuidor" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col mb-3">
+                    <label name="Variacoes[@i].Tipo">Tipo</label>
+                    <input name="Variacoes[@i].Tipo" class="form-control" value="@item.Tipo" />
+                </div>
+                <div class="col mb-3">
+                    <label name="Variacoes[@i].Familia">Família</label>
+                    <input type="text" name="Variacoes[@i].Familia" class="form-control" value="@item.Familia" />
+                </div>
+                <div class="col mb-3">
+                    <label name="Variacoes[@i].Classe">Classe</label>
+                    <input type="text" name="Variacoes[@i].Classe" class="form-control" value="@item.Classe" />
+                </div>
+                <div class="col mb-3">
+                    <label name="Variacoes[@i].Subclasse">Subclasse</label>
+                    <input type="text" name="Variacoes[@i].Subclasse" class="form-control" value="@item.Subclasse" />
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col mb-3">
+                    <label name="Variacoes[@i].UnMedida" data-bs-toggle="tooltip" data-bs-placement="top" title="Quantidade na Embalagem">Quantidade</label>
+                    <div class="input-group mb-3">
+                        <input type="text" name="Variacoes[@i].UnMedida" class="form-control" value="@item.UnMedida">
+                        <input list="UnMedida" class="form-control" name="Variacoes[@i].UnMedidaTipo" value="@item.UnMedidaTipo">
+                        <datalist id="UnMedida">
+                            <option value="Cp"></option>
+                            <option value="Caps"></option>
+                            <option value="Amp"></option>
+                        </datalist>
+                    </div>
+                </div>
+
+                <div class="col mb-3">
+                    <label name="Variacoes[@i].UnApresentacao" data-bs-toggle="tooltip" data-bs-placement="top" title="Dose da unidade da embalagem">Posologia</label>
+                    <div class="input-group mb-3">
+                        <input type="text" name="Variacoes[@i].UnApresentacao" class="form-control" value="@item.UnApresentacao">
+                        <input list="UnApresentacao" class="form-control" name="Variacoes[@i].UnApresentacaoTipo" value="@item.UnApresentacaoTipo">
+                        <datalist id="UnApresentacao">
+                            <option value="mg"></option>
+                            <option value="ml"></option>
+                        </datalist>
+                    </div>
+                </div>
+
+                <div class="col mb-3">
+                    <label name="Variacoes[@i].PrecoMercado">Preço de Mercado</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">R$</span>
+                        <input type="text" name="Variacoes[@i].PrecoMercado" class="form-control" value="@item.PrecoMercado">
+                    </div>
+                </div>
+
+                <div class="col mb-3">
+                    <label name="Variacoes[@i].PrecoAlldux">Preço Alldux</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">R$</span>
+                        <input type="text" name="Variacoes[@i].PrecoAlldux" class="form-control" value="@item.PrecoAlldux">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col mb-3 ps-4">
+                    <div class="form-check form-switch mt-2">
+                        <input class="form-check-input btn-lg" type="checkbox" id="Padronizado_@i" name="Padronizado_@i" @isChecked(item.Padronizado) onclick="document.getElementById('Variacoes[@i].Padronizado').value = this.checked" />
+                        <label class="form-check-label" for="Padronizado">Padronizado</label>
+                        <input type="hidden" value="@getValue(item.Padronizado)" name="Variacoes[@i].Padronizado" id="Variacoes[@i].Padronizado" />
+                    </div>
+                </div>
+
+                <div class="col mb-3 ps-4">
+                    <div class="form-check form-switch mt-2">
+                        <input class="form-check-input btn-lg" type="checkbox" id="Generico_@i" name="Generico_@i" @isChecked(item.Generico) onclick="document.getElementById('Variacoes[@i].Generico').value = this.checked" />
+                        <label class="form-check-label" for="Generico">Genérico</label>
+                        <input type="hidden" value="@getValue(item.Generico)" name="Variacoes[@i].Generico" id="Variacoes[@i].Generico" />
+                    </div>
+                </div>
+
+                <div class="col mb-3 ps-4">
+                    <div class="form-check form-switch mt-2">
+                        <input class="form-check-input btn-lg" type="checkbox" id="Biossimilar_@i" name="Biossimilar_@i" @isChecked(item.Biossimilar) onclick="document.getElementById('Variacoes[@i].Biossimilar').value = this.checked" />
+                        <label class="form-check-label" for="Biossimilar">Biossimilar</label>
+                        <input type="hidden" value="@getValue(item.Biossimilar)" name="Variacoes[@i].Biossimilar" id="Variacoes[@i].Biossimilar" />
+                    </div>
+                </div>
+
+                <div class="col mb-3 ps-4">
+                    <div class="form-check form-switch mt-2">
+                        <input class="form-check-input btn-lg" type="checkbox" id="Referencia_@i" name="Referencia_@i" @isChecked(item.Referencia) onclick="document.getElementById('Variacoes[@i].Referencia').value = this.checked" />
+                        <label class="form-check-label" for="Referencia">Referência</label>
+                        <input type="hidden" value="@getValue(item.Referencia)" name="Variacoes[@i].Referencia" id="Variacoes[@i].Referencia" />
+                    </div>
+                </div>
+            </div>
+
+            <!---->
+
+        </div><!-- variacao_@i --> <!-- @(i++) -->}
+                </div><!-- variacoes -->
+
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" id="addItem" onclick="AdicionaVariacao()">Adicionar Variação</button>
+                    <button type="button" class="btn btn-outline-danger" id="removeItem" onclick="RemoveVariacao()">Remover Variação</button>
+                </div>
+
+            </div>
+
+            <div class="form-group mb-3">
+                <input type="hidden" asp-for="CreatedUser" />
+                <input type="hidden" asp-for="CreatedDate" />
+                <button type="submit" class="btn btn-primary mt-3">Salvar Medicamento</button>
+                <a asp-action="Excluir" asp-controller="Medicamentos" asp-route-id="@Model.Id.ToString()" class="btn btn-outline-danger mt-3">Excluir Medicamento</a>
+            </div>
+
+        </div>
+    </div>
+</form>

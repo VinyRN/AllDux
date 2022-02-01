@@ -1,0 +1,28 @@
+
+<ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-sm-3 mb-lg-0">
+    @if (User.HasClaim("Content_DiretrizesClinicas", "True") || User.HasClaim("Content_DiretrizesPrecificadas", "True"))
+    {
+        <li><a class="nav-link px-2 text-white" asp-controller="Diretrizes" asp-action="Index">Diretrizes</a></li>
+    }
+    @if (User.HasClaim("Content_PadronizacaoInsumos", "True"))
+    {
+        <li><a class="nav-link px-2 text-white" asp-controller="PadronizacaoInsumos" asp-action="Index">Padronização de Insumos</a></li>
+    }
+    @if (User.HasClaim("Content_Negociacoes", "True"))
+    {
+        <!--li><a class="nav-link px-2 text-white" asp-controller="Negociacoes" asp-action="Index">Hub de Negociações</a></li-->
+        <li><a class="nav-link px-2 text-white" asp-controller="Hub" asp-action="Index">Hub de Negociações</a></li>
+    }
+    @if (User.HasClaim("Content_FerramentasAnalises", "True"))
+    {
+        <li><a class="nav-link px-2 text-white" asp-controller="FerramentasAnalise" asp-action="Index">Ferramentas de Gestão</a></li>
+    }
+</ul>
+
+@if (this.User.IsInRole("Admin"))
+{
+    <ul class="nav justify-content-center me-5">
+        <li><a class="nav-link px-2 text-white" asp-controller="Medicamentos" asp-action="Index">Medicamentos</a></li>
+        <li><a class="nav-link px-2 text-white" asp-controller="Faq" asp-action="Index">Ajuda</a></li>
+    </ul>
+}

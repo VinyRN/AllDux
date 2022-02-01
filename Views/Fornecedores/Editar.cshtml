@@ -1,0 +1,234 @@
+﻿@model Fornecedores
+
+@{
+    ViewData["Title"] = "Editar Fornecedor";
+}
+
+
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+
+        @{await Html.RenderPartialAsync("_MenuHubPartial");}
+
+        <div class="col py-3" style="margin-left:20px;">
+
+
+            <div class="row flex-nowrap">
+                <div class="col-12 col-sm-12 text-start">
+                    <div class="container-fluid mt-3 px-0">
+                        <nav aria-label="breadcrumb d-flex text-start">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a asp-controller="Fornecedores" asp-action="Index">Fornecedor</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row flex-nowrap">
+                <div class="col-12 text-start">
+
+                    <div class="row mb-3 mt-3">
+                        <div class="col-12 col-sm-12 text-start">
+                            @{await Html.RenderPartialAsync("_AlertPartial");}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row flex-nowrap">
+                <div class="col-12 text-start">
+
+                    <form asp-controller="Fornecedores" asp-action="Editar" method="post">
+
+                        <input type="hidden" asp-for="IdFornecedor" />
+                        <input type="hidden" asp-for="CreatedUser" />
+                        <input type="hidden" asp-for="CreatedDate" />
+                        <input type="hidden" asp-for="LastUpdate" />
+                        <input type="hidden" asp-for="LastUpdateUser" />
+
+
+                        <div class="row mb-3 mt-3">
+
+                            <div class="col-12 col-sm-3 text-start">
+                                <div class="form-group">
+                                    <label asp-for="CNPJ">CNPJ</label>
+                                    <input asp-for="CNPJ" class="form-control" maxlength="14" value="@Model.CNPJ" required />
+                                    <span asp-validation-for="CNPJ" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-9 text-start">
+                                <div class="form-group">
+                                    <label asp-for="RazaoSocial">Razao Social</label>
+                                    <input asp-for="RazaoSocial" class="form-control" maxlength="200" value="@Model.RazaoSocial" required />
+                                    <span asp-validation-for="RazaoSocial" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-9 text-start">
+                                <div class="form-group">
+                                    <label asp-for="NomeFantasia">Nome Fantasia</label>
+                                    <input asp-for="NomeFantasia" class="form-control" maxlength="200" value="@Model.NomeFantasia" required />
+                                    <span asp-validation-for="NomeFantasia" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3 text-start">
+                                <div class="form-group">
+                                    <label asp-for="TipoFornecedor">Tipo de Fornecedor</label>
+                                    <select asp-for="TipoFornecedor" class="form-select" id="TipoFornecedor" aria-label="Tipo de Fornecedor" required>
+                                        @if (Model.TipoFornecedor == 1)
+                                        {
+                                            <option selected value="1">Distribuidor</option>
+                                            <option value="2">Laboratorio</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="1">Distribuidor</option>
+                                            <option selected value="2">Laboratorio</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-7 text-start">
+                                <div class="form-group">
+                                    <label asp-for="Endereco">Endereco</label>
+                                    <input asp-for="Endereco" class="form-control" maxlength="200" value="@Model.Endereco" required />
+                                    <span asp-validation-for="Endereco" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-2 text-start">
+                                <div class="form-group">
+                                    <label asp-for="Numero">Número</label>
+                                    <input asp-for="Numero" class="form-control" maxlength="10" value="@Model.Numero" required />
+                                    <span asp-validation-for="Numero" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3 text-start">
+                                <div class="form-group">
+                                    <label asp-for="Cidade">Cidade</label>
+                                    <input asp-for="Cidade" class="form-control" maxlength="100" value="@Model.Cidade" required />
+                                    <span asp-validation-for="Cidade" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3 text-start">
+                                <div class="form-group">
+                                    <label asp-for="Bairro">Bairro</label>
+                                    <input asp-for="Bairro" class="form-control" maxlength="100" value="@Model.Bairro" required />
+                                    <span asp-validation-for="Bairro" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3 text-start">
+                                <div class="form-group">
+                                    <label asp-for="Cep">CEP</label>
+                                    <input asp-for="Cep" class="form-control" maxlength="8" value="@Model.Cep" required />
+                                    <span asp-validation-for="Cep" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3 text-start">
+                                <div class="form-group">
+                                    <label asp-for="Estado">Estado</label>
+                                    @*<input asp-for="Estado" class="form-control" maxlength="50" required />*@
+                                    <select class="form-select form-select mb-3" asp-for="Estado" id="Estado" name="Estado" required>
+                                        <option value="" selected>Selecione o Estado</option>
+                                        @foreach (EstadosFederacao ObjEstado in ViewBag.ListaEstados)
+                                        {
+                                            <option value="@ObjEstado.IdUf">@ObjEstado.ds_estado</option>
+                                        }
+                                    </select>
+
+                                    <span asp-validation-for="Estado" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3 text-start">
+                                <div class="form-group">
+                                    <label asp-for="Pais">Pais</label>
+                                    @*<input asp-for="Pais" class="form-control" maxlength="100" value="@Model.Pais" required />*@
+                                    <select class="form-select form-select mb-3" asp-for="Pais" id="Pais" name="Pais" required>
+                                        <option value="" selected>Selecione o Pais</option>
+                                        @foreach (Paises ObjPais in ViewBag.ListaPaises)
+                                        {
+                                            if (ObjPais.NomePais == "Brasil")
+                                            {
+                                                <option value="@ObjPais.IdPais" selected>@ObjPais.NomePais</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@ObjPais.IdPais">@ObjPais.NomePais</option>
+                                            }
+
+                                        }
+                                    </select>
+                                    <span asp-validation-for="Pais" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6 text-start">
+                                <div class="form-group">
+                                    <label asp-for="TelefonePrincipal">Telefone Principal</label>
+                                    <input asp-for="TelefonePrincipal" class="form-control" maxlength="10" value="@Model.TelefonePrincipal" required />
+                                    <span asp-validation-for="TelefonePrincipal" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6 text-start">
+                                <div class="form-group">
+                                    <label asp-for="TelefoneSecundario">Telefone Secundario</label>
+                                    <input asp-for="TelefoneSecundario" class="form-control" maxlength="10" value="@Model.TelefoneSecundario" />
+                                    <span asp-validation-for="TelefoneSecundario" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-6 text-start">
+                                <div class="form-group">
+                                    <label asp-for="ContatoAlldux">Contato Alldux</label>
+                                    <input asp-for="ContatoAlldux" class="form-control" maxlength="100" value="@Model.ContatoAlldux" required />
+                                    <span asp-validation-for="ContatoAlldux" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3 text-start">
+                                <div class="form-group">
+                                    <label asp-for="TelefoneAlldux">Telefone Alldux</label>
+                                    <input asp-for="TelefoneAlldux" class="form-control" maxlength="10" value="@Model.TelefoneAlldux" required />
+                                    <span asp-validation-for="TelefoneAlldux" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3 text-start">
+                                <div class="form-group">
+                                    <label asp-for="Qualificacao">Qualificacao</label>
+                                    <input asp-for="Qualificacao" class="form-control" maxlength="10" value="@Model.Qualificacao" required />
+                                    <span asp-validation-for="Qualificacao" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-12 text-start">
+                                <div class="mt-1 pt-1 pb-1">
+                                    <button type="submit" class="btn btn-primary mt-3">Salvar</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,120 @@
+@using System.Linq;
+@using alldux_plataforma.Models;
+@model User
+
+@{
+    ViewData["Title"] = "Administração: criar novo usuário";
+}
+
+<div class="container pt-3 mb-3">
+    <h1>@ViewData["Title"]</h1>
+    <a asp-action="Index" class="btn btn-outline-primary">Voltar</a>
+</div>
+
+
+<form method="post">
+
+<div class="row">
+
+<div class="col-6 text-start">
+    
+        <div class="form-group mb-3">
+            <label asp-for="Name">Nome</label>
+            <input asp-for="Name" class="form-control" />
+        </div>
+        <div class="form-group mb-3">
+            <label asp-for="Email">E-mail</label>
+            <input asp-for="Email" class="form-control" />
+        </div>
+        <div class="form-group mb-3">
+            <label asp-for="PhoneNumber">Telefone</label>
+            <input asp-for="PhoneNumber" class="form-control" />
+        </div>
+
+        @if(this.User.IsInRole("BrandAdmin"))
+        {
+            <div class="form-group mb-3">
+                <label asp-for="Company">Empresa</label>
+                <input asp-for="Company" class="form-control" value="@ViewBag.Company" readonly />
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Cargo">Cargo</label>
+                <input asp-for="Cargo" class="form-control" value="@ViewBag.Cargo" readonly />
+            </div>
+        }else{
+            <div class="form-group mb-3">
+                <label asp-for="Company">Empresa</label>
+                <input asp-for="Company" class="form-control" />
+            </div> 
+            <div class="form-group mb-3">
+                <label asp-for="Cargo">Cargo</label>
+                <input asp-for="Cargo" class="form-control" />
+            </div> 
+        }
+        <div class="form-group mb-3">
+            <label asp-for="UserType">Tipo de usuário</label>
+            <select class="form-control" id="UserType" name="UserType">
+                @* @foreach (var role in ViewBag.Roles)
+                {
+                    var selectedState = @role.ToString() == "User";
+
+                    if(@role.ToString() == "Admin"){
+                        if(this.User.IsInRole("Admin")){
+                            <option Value="@role"> @role </option>
+                        }
+                    }else{
+                        <option Selected="@selectedState" Value="@role"> @role </option>
+                    }
+                } *@
+                @foreach (var role in ViewBag.Roles)
+                {
+                    if(@role.ToString() == "Admin"){
+                        if(this.User.IsInRole("Admin")){
+                            <option Value="@role"> @role </option>
+                        }
+                    }else{
+                        <option Value="@role">@role</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="form-group mb-3">
+            <label asp-for="Password">Senha</label>
+            <input asp-for="Password" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Criar usuário</button>
+
+</div>
+
+<div class="col-6">
+    <h3>Áreas de acesso</h3>
+    <div class="form-check form-switch">
+        <input class="form-check-input btn-lg" type="checkbox" id="Content_DiretrizesClinicas" name="Content_DiretrizesClinicas" checked>
+        <label class="form-check-label" for="Content_DiretrizesClinicas">Diretrizes Clínicas</label>
+    </div>
+    <div class="form-check form-switch">
+        <input class="form-check-input btn-lg" type="checkbox" id="Content_DiretrizesPrecificadas" name="Content_DiretrizesPrecificadas" checked>
+        <label class="form-check-label" for="Content_DiretrizesPrecificadas">Diretrizes Precificadas</label>
+    </div>
+    <div class="form-check form-switch">
+        <input class="form-check-input btn-lg" type="checkbox" id="Content_PadronizacaoInsumos" name="Content_PadronizacaoInsumos" checked>
+        <label class="form-check-label" for="Content_PadronizacaoInsumos">Padronização de Insumos</label>
+    </div>
+    <div class="form-check form-switch">
+        <input class="form-check-input btn-lg" type="checkbox" id="Content_Negociacoes" name="Content_Negociacoes" checked>
+        <label class="form-check-label" for="Content_Negociacoes">Negociações</label>
+    </div>
+    <div class="form-check form-switch">
+        <input class="form-check-input btn-lg" type="checkbox" id="Content_FerramentaAnalises" name="Content_FerramentaAnalises" checked>
+        <label class="form-check-label" for="Content_FerramentaAnalises">Ferramentas de Análises</label>
+    </div>
+</div>
+
+<div class="col-6">
+    <div asp-validation-summary="All" class="text-danger"></div>
+</div>
+
+</div>
+
+</form>

@@ -1,0 +1,28 @@
+@{
+    ViewData["Title"] = "Termo de Responsabilidade";
+}
+
+<div class="row">
+  <div class="container mt-3 px-0">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="container mb-4 px-0">
+    <h1>@ViewData["Title"]</h1>
+  </div>
+</div>
+
+<div class="row">
+<div class="col-8 text-justify">
+
+<partial name="_TermoResponsabilidade" />
+
+<p>Aceite dos termos gravado em: @TempData["DataAceite"]</p>
+
+</div>
+</div>

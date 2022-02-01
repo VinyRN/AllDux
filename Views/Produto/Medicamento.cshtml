@@ -1,0 +1,241 @@
+﻿
+@model ProdutoHubViewModels
+
+@{ ViewData["Title"] = "Lista de Produtos"; }
+
+<div class="container-fluid">
+
+    <div class="row flex-nowrap">
+
+        @{await Html.RenderPartialAsync("_MenuHubPartial");}
+
+        <div class="col py-3">
+
+            <div class="table-responsive">
+                <div class="container mt-3">
+                    <nav aria-label="breadcrumb d-flex text-start">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a asp-area="" asp-controller="Produto" asp-action="Index">Produto</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Lista de Produto(s) - @ViewBag.TipoProduto</li>
+                        </ol>
+                    </nav>
+                </div>
+
+                @{await Html.RenderPartialAsync("_AlertPartial");}
+
+            </div>
+
+            <div class="table-responsive">
+                <div class="container mt-3">
+
+                    <table class="table table-hover padronizacao-insumos" id="Medicamentos">
+                        <thead style="text-align: justify">
+                            <tr>
+                                <th></th>
+                                <th>Principio Ativo</th>
+                                <th>Nome Comercial</th>
+                                <th>Laboratório</th>
+                                <th>Apresentação</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody style="vertical-align: middle; text-align: justify;">
+                            @foreach (Medicamento MedItem in Model.objListMedicamento)
+                            {
+                                foreach (MedicamentoVariacao MedVarItem in MedItem.Variacoes)
+                                {
+                                    ProdutoFornecedorHub ObjProdVerHub = new ProdutoFornecedorHub();
+
+                                    @if (Model.objListProdutoVerHub != null && Model.objListProdutoVerHub.Count > 0)
+                                    {
+                                        ObjProdVerHub = Model.objListProdutoVerHub.Find(
+                                        delegate (ProdutoFornecedorHub ItemProdVerHub)
+                                        {
+                                            return ItemProdVerHub.MedicamentoVariacaoId == MedVarItem.Id;
+                                        }
+                                    );
+                                    }
+
+                                    if ((ObjProdVerHub.ProdutoId != Guid.Empty) && (ObjProdVerHub.IdFornecedor == ObjProdVerHub.LoginUserId))
+                                    {
+                                        
+                                        <tr>
+
+                                            <td><a class="btnDetalhes" href="#" data-toggle="tooltip" data-target="#myModal" data-id="@ObjProdVerHub.ProdutoId.ToString()" title="Detalhar"><i class="bi bi-arrow-up-left-square-fill"></i></a></td>
+                                            <td>@MedItem.PrincipioAtivo</td>
+                                            <td>@MedVarItem.Nome</td>
+                                            <td>@MedVarItem.Laboratorio</td>
+                                            <td>@ObjProdVerHub.Apresentacao</td>
+
+                                            <td>
+                                                <div class="btn-toolbar justify-content-center align-items-center">
+
+                                                    @if (Model.objListProdutoVerHub != null && Model.objListProdutoVerHub.Count > 0)
+                                                    {
+                                                        @if (ObjProdVerHub != null)
+                                                        {
+                                                            @if (ObjProdVerHub.ProdutoId != Guid.Empty)
+                                                            {
+                                                                if ((ObjProdVerHub.IdFornecedor == ObjProdVerHub.LoginUserId))
+                                                                {
+                                                                    if (ObjProdVerHub.Status == 1)
+                                                                    {
+                                                                        <div class="btn-toolbar justify-content-center align-items-center">
+                                                                            <a asp-controller="FornecedorProduto" asp-action="EditarMedicamento" asp-route-Id="@ObjProdVerHub.ProdutoId" data-toggle="tooltip" title="Editar" class="mx-2"><i class="bi bi-pencil-square"></i></a>
+                                                                        </div>
+                                                                        <div class="btn-toolbar justify-content-center align-items-center">
+                                                                            <a asp-controller="FornecedorProduto" asp-action="DeletarMedicamento" asp-route-Id="@ObjProdVerHub.ProdutoId" data-toggle="tooltip" title="Excluir"><i class="bi bi-trash-fill"></i></a>
+                                                                        </div>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    @*<div class="btn-toolbar justify-content-center align-items-center">
+                                                                        <a asp-controller="FornecedorProduto" asp-action="AdicionarMedicamento" asp-route-Id="@MedVarItem.Id.ToString()" data-toggle="tooltip" title="Incluir" class="mx-2"><i class="bi bi-save-fill"></i></a>
+                                                                    </div>*@
+                                                                    <div class="btn-toolbar justify-content-center align-items-center">
+                                                                        <a asp-controller="FornecedorProduto" asp-action="EditarMedicamento" asp-route-Id="@ObjProdVerHub.ProdutoId" data-toggle="tooltip" title="Editar" class="mx-2"><i class="bi bi-pencil-square"></i></a>
+                                                                    </div>
+                                                                    <div class="btn-toolbar justify-content-center align-items-center">
+                                                                        <a asp-controller="FornecedorProduto" asp-action="DeletarMedicamento" asp-route-Id="@ObjProdVerHub.ProdutoId" data-toggle="tooltip" title="Excluir"><i class="bi bi-trash-fill"></i></a>
+                                                                    </div>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="btn-toolbar justify-content-center align-items-center">
+                                                                    <a asp-controller="FornecedorProduto" asp-action="AdicionarMedicamento" asp-route-Id="@MedVarItem.Id.ToString()" data-toggle="tooltip" title="Incluir"><i class="bi bi-save-fill"></i></a>
+                                                                </div>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="btn-toolbar justify-content-center align-items-center">
+                                                                <a asp-controller="FornecedorProduto" asp-action="AdicionarMedicamento" asp-route-Id="@MedVarItem.Id.ToString()" data-toggle="tooltip" title="Incluir"><i class="bi bi-save-fill"></i></a>
+                                                            </div>
+                                                        }
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="btn-toolbar justify-content-center align-items-center">
+                                                            <a asp-controller="FornecedorProduto" asp-action="AdicionarMedicamento" asp-route-Id="@MedVarItem.Id.ToString()" data-toggle="tooltip" title="Incluir"><i class="bi bi-save-fill"></i></a>
+                                                        </div>
+
+                                                    }
+
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr>
+
+                                            <td><i class="bi bi-arrow-up-left-square"></i></td>
+                                            <td>@MedItem.PrincipioAtivo</td>
+                                            <td>@MedVarItem.Nome</td>
+                                            <td>@MedVarItem.Laboratorio</td>
+                                            <td>@ObjProdVerHub.Apresentacao</td>
+
+                                            <td>
+                                                <div class="btn-toolbar justify-content-center align-items-center">
+
+                                                    @if (Model.objListProdutoVerHub != null && Model.objListProdutoVerHub.Count > 0)
+                                                    {
+                                                        @if (ObjProdVerHub != null)
+                                                        {
+                                                            @if (ObjProdVerHub.ProdutoId != Guid.Empty)
+                                                            {
+                                                                if (ObjProdVerHub.IdFornecedor == ObjProdVerHub.LoginUserId)
+                                                                {
+                                                                    if (ObjProdVerHub.Status == 1)
+                                                                    {
+                                                                        <div class="btn-toolbar justify-content-center align-items-center">
+                                                                            <a asp-controller="FornecedorProduto" asp-action="EditarMedicamento" asp-route-Id="@ObjProdVerHub.ProdutoId" data-toggle="tooltip" title="Editar" class="mx-2"><i class="bi bi-pencil-square"></i></a>
+                                                                        </div>
+                                                                        <div class="btn-toolbar justify-content-center align-items-center">
+                                                                            <a asp-controller="FornecedorProduto" asp-action="DeletarMedicamento" asp-route-Id="@ObjProdVerHub.ProdutoId" data-toggle="tooltip" title="Excluir"><i class="bi bi-trash-fill"></i></a>
+                                                                        </div>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    @*<div class="btn-toolbar justify-content-center align-items-center">
+                                                                        <a asp-controller="FornecedorProduto" asp-action="AdicionarMedicamento" asp-route-Id="@MedVarItem.Id.ToString()" data-toggle="tooltip" title="Incluir" class="mx-2"><i class="bi bi-save-fill"></i></a>
+                                                                    </div>*@
+                                                                    <div class="btn-toolbar justify-content-center align-items-center">
+                                                                        <a asp-controller="FornecedorProduto" asp-action="EditarMedicamento" asp-route-Id="@ObjProdVerHub.ProdutoId" data-toggle="tooltip" title="Editar" class="mx-2"><i class="bi bi-pencil-square"></i></a>
+                                                                    </div>
+                                                                    <div class="btn-toolbar justify-content-center align-items-center">
+                                                                        <a asp-controller="FornecedorProduto" asp-action="DeletarMedicamento" asp-route-Id="@ObjProdVerHub.ProdutoId" data-toggle="tooltip" title="Excluir"><i class="bi bi-trash-fill"></i></a>
+                                                                    </div> }
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="btn-toolbar justify-content-center align-items-center">
+                                                                    <a asp-controller="FornecedorProduto" asp-action="AdicionarMedicamento" asp-route-Id="@MedVarItem.Id.ToString()" data-toggle="tooltip" title="Incluir"><i class="bi bi-save-fill"></i></a>
+                                                                </div>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="btn-toolbar justify-content-center align-items-center">
+                                                                <a asp-controller="FornecedorProduto" asp-action="AdicionarMedicamento" asp-route-Id="@MedVarItem.Id.ToString()" data-toggle="tooltip" title="Incluir"><i class="bi bi-save-fill"></i></a>
+                                                            </div>
+                                                        }
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="btn-toolbar justify-content-center align-items-center">
+                                                            <a asp-controller="FornecedorProduto" asp-action="AdicionarMedicamento" asp-route-Id="@MedVarItem.Id.ToString()" data-toggle="tooltip" title="Incluir"><i class="bi bi-save-fill"></i></a>
+                                                        </div>
+
+                                                    }
+
+                                                </div>
+                                            </td>
+                                        </tr>
+                                     }
+                                 }
+                             }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div id="ProdutoEstoque"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section scripts{
+        <script type="text/javascript">$(document).ready(function () {
+
+                $.ajaxSetup({ cache: false });
+                $(".btnDetalhes").click(function () {
+                    console.log("clicado");
+                    var id = $(this).attr("data-id");
+                    $("#ProdutoEstoque").load("/Produto/ProdutoEstoque/" + id, function () {
+                        $('#myModal').modal("show");
+                    });
+                });
+            });</script>
+    }
+</div>
+
+
+
+

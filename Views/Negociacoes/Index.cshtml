@@ -1,0 +1,224 @@
+@using Microsoft.AspNetCore
+@using System.Collections.Generic
+@using System.Linq
+@using System.Globalization
+@model Negociacao
+
+@{
+    ViewData["Title"] = "Hub de Negociações";
+}
+
+@functions {
+    public string converte(string t)
+    {
+        double temp = Convert.ToDouble(t.Replace(".", "").Replace("R$", "").Replace(" ", ""), new NumberFormatInfo() { NumberDecimalSeparator = ",", NumberGroupSeparator = ".", CurrencyDecimalSeparator = "," });
+        var result = string.Format("{0:N}", temp);
+        return result;
+    }
+    public string dataFim(DateTime data)
+    {
+
+        if (data.ToString("dd/MM/yyyy") == "01/01/0001")
+        {
+            DateTime hoje = DateTime.Today;
+            DateTime ultimoDiaDoMes = new DateTime(hoje.Year, hoje.Month, DateTime.DaysInMonth(hoje.Year, hoje.Month));
+            return ultimoDiaDoMes.ToString("dd/MM/yyyy");
+        }
+
+        return data.ToString("dd/MM/yyyy");
+    }
+
+  public string calculoPercentual(double margem){
+    if(margem <= 0.99){ return "-";}
+    return string.Format("{0:N0}", margem) + "%";
+  }
+
+    public string isActive(bool userActive){
+        if(Model == null) return "";
+        if(userActive){
+            return "active";
+        }
+        return "";
+    }
+}
+
+<div class="row">
+    <div class="container mt-3">
+        <div class="d-flex text-end" id="buttom-panel" style="float: right;">
+            @if (this.User.IsInRole("Admin"))
+            {
+                <a asp-controller="Negociacoes" asp-action="Adicionar" class="btn bt-lg btn-primary">Nova Negociação</a>
+            }
+        </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+            </ol>
+        </nav>
+    </div>
+
+    @{await Html.RenderPartialAsync("_AlertPartial");}
+
+    <div class="container mb-2 text-center">
+        <h1 class="display-5 fw-bold">@ViewData["Title"]</h1>
+        <div class="col-lg-11 mx-auto">
+            <p class="lead mb-4">
+                Os valores apresentados refletem os melhores preços de distribuidores qualificados pela equipe do ALLDUX. Os valores podem variar de acordo com a alíquota de cada estado e estão sujeitos à disponibilidade de estoque e faturamento mínimo na data da consulta.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-5">
+
+    @if (ViewBag.ListaNegociacoes == null)
+    {
+        <div class="text-center"><p>Não há negociações disponíveis no momento.</p></div>
+    }
+
+    <div class="row mt-2">
+        <div class="col-sm-3">
+
+            <div class="list-group">
+
+                @foreach (Negociacao negociacao in ViewBag.ListaNegociacoes)
+                {
+                    <a asp-action="Index" asp-route-id="@negociacao.Id" class="list-group-item list-group-item-action @isActive(Model.Id == negociacao.Id) " onclick="ExibeLoading();">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">@negociacao.Titulo</h6>
+                            <small>@negociacao.DestaqueCurto</small>
+                        </div>
+                        <p class="mb-1">@negociacao.Parceiro</p>
+                        <small>@negociacao.DestaqueLongo</small>
+                    </a>
+                    
+                }
+            </div><!-- list-group -->
+        </div><!-- col -->
+
+            <div class="col-sm-9">
+                <div class="card card-negociacoes">
+                    <div class="card-body py-3 px-4 justify-content-between">
+
+                        @if (Model.Id == Guid.Empty)
+                        {
+                            <div class="text-center">
+                                <p class="my-5">Selecione uma negociação ao lado.</p>
+                            </div>
+                        }
+                        else
+                        {
+                            <h3>
+                                @Model.Titulo
+                                @if (this.User.IsInRole("Admin"))
+                                {
+                                    <a class="btn btn-outline-danger btn-sm" asp-area="" asp-controller="Negociacoes" asp-action="Remover" asp-route-id="@Model.Id">Remover Negociacao</a>
+                                }
+                            </h3>
+                            <h6 class="text-muted">@Model.Parceiro</h6>
+
+                            @if (Model.Texto != "<br>")
+                            {
+                                <div class="">
+                                    <p>@Html.Raw(Model.Texto)</p>
+                                </div>
+                            }
+
+                            <div class="row mt-4">
+                                <div class="col">
+                                    <div class="mb-3 col">
+                                        <label>Início</label>
+                                        <input class="form-control" value='@Model.DataInicio.ToString("dd/MM/yyyy")' readonly />
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3 col">
+                                        <label>Finaliza em</label>
+                                        <input class="form-control" value='@dataFim(Model.DataFim)' readonly />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="negociacoes">
+                                    <thead>
+                                        <tr class="text-center align-middle">
+                                            <th>Nome <br /> <i>Princ. Ativo</i></th>
+                                            <th>Laboratório</th>
+                                            <th>Distribuidor</th>
+                                            <th>Preço de mercado</th>
+                                            <th>Preço da negociação</th>
+                                            <th>Desconto %</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.NegociacaoItem)
+                                        {
+                                        <tr class="align-middle btnDetalhes" data-id="@item.MedicamentoId.ToString()" style="cursor: pointer;">
+                                            <td class="text-start">
+                                                @item.Nome<br /> 
+                                                <i>@item.PrincipioAtivo</i><br />
+                                                @item.UnApresentacao @item.UnApresentacaoTipo / @item.UnMedida @item.UnMedidaTipo
+                                            </td>
+                                            <td class="text-center">@item.Laboratorio</td>
+                                            <td class="text-center">@item.Distribuidor</td>
+                                            <td class="text-end">
+                                                @if (!String.IsNullOrEmpty(item.PrecoMercado.ToString())){
+                                                    @("R$ "+converte(item.PrecoMercado.ToString()))
+                                                }
+                                            </td>
+                                            <td class="text-end">
+                                                @if (!String.IsNullOrEmpty(item.PrecoDesconto)){
+                                                    @("R$ "+converte(item.PrecoDesconto))
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                @calculoPercentual(item.Margem)
+                                            </td>
+                                        </tr>
+                                        }                                        
+
+                                    </tbody>
+                                </table>
+                            </div><!-- itens -->
+
+                            @if (!String.IsNullOrEmpty(Model.Obs))
+                            {
+                                <div class="mt-3">
+                                    <small class="text-muted fw-lighter">@Html.Raw(Model.Obs)</small>
+                                </div>
+                            }
+                        }
+                    </div><!-- card-body -->
+                </div> @*card*@
+            </div><!-- col -->
+
+    </div><!-- row -->
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="fichaTecnicamedicamento"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $.ajaxSetup({ cache: false });
+            $(".btnDetalhes").click(function () {
+                console.log("clicado");
+                var id = $(this).attr("data-id");
+                $("#fichaTecnicamedicamento").load("/Medicamentos/FichaTecnicaMedicamento/" + id, function () {
+                    $('#myModal').modal("show");
+                });
+            });
+        });
+    </script>
+}

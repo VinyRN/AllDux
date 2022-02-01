@@ -1,0 +1,159 @@
+@using System.Globalization
+@model DiretrizPrecificada
+
+@{
+    ViewData["Title"] = "Diretrizes Precificadas";
+    double t1 = 0;
+    double t2 = 0;
+    //NumberFormatInfo provider = new NumberFormatInfo(){NumberDecimalSeparator = ",", NumberGroupSeparator = ".", CurrencyDecimalSeparator = ","};
+}
+
+@functions {
+  public string converte(string t){
+    if(!String.IsNullOrEmpty(t)){
+      double temp = Convert.ToDouble(t.Replace(".", ","), new NumberFormatInfo(){NumberDecimalSeparator = ",", NumberGroupSeparator = ".", CurrencyDecimalSeparator = ","});
+      return string.Format("{0:N}", temp);
+    }
+    return string.Format("{0:N}", 0);
+  }
+}
+
+<div class="row">
+  <div class="container mt-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Diretrizes" asp-action="Index">Diretrizes</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Diretrizes Precificadas</li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="container mb-4">
+    <h1>Precificação de Protocolos: @ViewBag.Titulo
+      @if(this.User.IsInRole("Admin")){
+      <a class="btn btn-outline-danger btn-sm" asp-area="" asp-controller="DiretrizesPrecificadas" asp-action="Editar" asp-route-id="@Model.Id">Editar Diretriz</a>
+      }
+    </h1>
+    <p>@Html.Raw(Model.Conteudo)</p>
+  </div>
+</div>
+
+<div class="container mb-4">
+
+
+    <div class="table-responsive" id="div_tabela_0">
+    <table class="table table-hover align-middle table-diretrizes-precificadas" id="tabela_0">
+      <thead>
+        @if(!String.IsNullOrEmpty(Model.DiretrizPrecificadaTabela.FirstOrDefault().Titulo)){
+        <tr>
+        <th class="table-destaque" colspan="10">
+          <h4>@Model.DiretrizPrecificadaTabela.FirstOrDefault().Titulo</h4>
+        </th>
+        </tr>
+        }
+        <tr>
+          <th colspan="10">
+          <div class="form-group mb-3">
+            @Model.DiretrizPrecificadaTabela.FirstOrDefault().ChaveTabela
+          </div>
+          </th>
+        </tr>
+        <tr>
+          <th colspan="5">
+          <div class="form-group mb-3">
+            @Model.DiretrizPrecificadaTabela.FirstOrDefault().Observacoes
+          </div>
+          </th>
+          <th colspan="5">
+          <div class="form-group mb-3">
+            @Model.DiretrizPrecificadaTabela.FirstOrDefault().ChaveTabelaReduzida
+          </div>
+          </th>
+        </tr>
+        <tr>
+          <th>Ordem</th>
+          <th>Medicamento</th>
+          <th>Mg/m2 ou cp</th>
+          <th>Dias por ciclo</th>
+          <th>SC ou Peso</th>
+          <th>Dose Final</th>
+          <th>Valor cp ou mg/Alldux</th>
+          <th>Valor <br/> (1 ciclo)</th>
+          <th>Total ciclo</th>
+          <th>Valor total <br/>(conforme ciclos)</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        @foreach (var linha in Model.DiretrizPrecificadaTabela.FirstOrDefault().DiretrizPrecificadaRegistro)
+        {
+          <tr>
+            <td>@linha.Ordem</td>
+            <td>@linha.MedicamentoNome @linha.Medicamento</td>
+            <td>
+              @if(!String.IsNullOrEmpty(linha.Mgm2)){
+                @string.Format("{0:N}", linha.Mgm2.Replace(".", ","))
+              }
+            </td>
+            <td>@linha.DiasCiclo</td>
+            <td>
+              @if(!String.IsNullOrEmpty(linha.ScPeso)){
+                @string.Format("{0:N}", linha.ScPeso.Replace(".", ","))
+              }
+            </td>
+            <td>
+              @linha.CalcDoseFinal()
+            </td>
+            <td>
+                @("R$ " + converte(linha.ValorCpMgAlldux.ToString()))
+            </td>
+            <td>
+                @("R$ " + converte(linha.CalcValorCiclo().ToString()))
+            </td>
+            <td>@linha.CicloTotal</td>
+            <td>
+              @if(!String.IsNullOrEmpty(linha.CalcValorTotal().ToString()))
+              {
+                @("R$ " + converte(linha.CalcValorTotal().ToString()))
+              }
+            </td>
+          </tr>
+          @if( linha.CalcValorCiclo().ToString() != null ){
+            @* var v1 = linha.ValorCiclo.Replace(".", ",");
+            t1 += Convert.ToDouble(v1, provider); *@
+            t1 += linha.CalcValorCiclo();
+          }
+          @if( linha.CalcValorCiclo().ToString() != null ){
+            @* var v2 = linha.ValorTotal.Replace(".", ",");
+            t2 += Convert.ToDouble(v2, provider); *@
+            t2 += linha.CalcValorTotal();
+          }
+
+        }
+          <tr class="table-total">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Total</td>
+            <td>R$ @string.Format("{0:N}", t1)</td>
+            <td></td>
+            <td>R$ @string.Format("{0:N}", t2)</td>
+          </tr>
+      </tbody>
+    </table>
+    </div>
+
+    @* Zerando os totais *@ 
+    if(t1 != 0 && t2 != 0){ t1 = 0; t2 = 0; }
+    
+    <div class="container mb-4">
+      @if(!String.IsNullOrEmpty(Model.DiretrizPrecificadaTabela.FirstOrDefault().Observacoes)){
+        <p>@Html.Raw(Model.DiretrizPrecificadaTabela.FirstOrDefault().Observacoes)</p>
+      }
+    </div>
+
+</div>

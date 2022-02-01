@@ -1,0 +1,65 @@
+﻿@model FornecedoresProduto
+
+@{
+    ViewData["Title"] = "Produto Estoque";
+}
+
+<div class="modal-header">
+    <h4 class="modal-title">@ViewData["Title"]</h4>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div class="modal-body">
+
+    <div class="row">
+        <div class="col mb-3">
+            <label>Qtd Estoque</label>
+            <input type="text" asp-for="Estoque" class="form-control" readonly />
+        </div>
+
+        <div class="col mb-3">
+            <label>Lote</label>
+            <input type="text" asp-for="Lote" class="form-control" readonly />
+        </div>
+        <div class="col mb-3">
+            <label>Status</label>
+            @if (Model.Status == 1)
+            {
+                <input type="text" asp-for="Status" class="form-control" value="Aguardando Aprovação" readonly />
+            }
+            else if (Model.Status == 2)
+            {
+                <input type="text" asp-for="Status" class="form-control" value="Aprovado" readonly />
+            }
+            else
+            {
+                <input type="text" asp-for="Status" class="form-control" value="Cancelado" readonly />
+            }
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col mb-3">
+            <label>Data Disponível</label>
+            <input type="text" asp-for="DataDisponivel" class="form-control" readonly />
+        </div>
+        <div class="col mb-3">
+            <label>Data Indisponível</label>
+            <input type="text" asp-for="DataIndisponivel" class="form-control" readonly />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col mb-3">
+            <label>Observações</label>
+            @*<input type="text" asp-for="Observacoes" class="form-control" readonly />*@
+            <textarea asp-for="Observacoes" style="width:100%; height:100px; display:block;" disabled></textarea>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+</div>

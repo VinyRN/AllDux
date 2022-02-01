@@ -1,0 +1,100 @@
+﻿
+@model FornecedoresAnexos
+
+@{
+    ViewData["Title"] = "Anexos Fornecedor";
+}
+
+
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+
+        @{await Html.RenderPartialAsync("_MenuHubPartial");}
+
+        <div class="col py-3" style="margin-left:20px;">
+
+
+            <div class="row flex-nowrap">
+                <div class="col-12 col-sm-12 text-start">
+                    <div class="container-fluid mt-3 px-0">
+
+                        <div class="d-flex text-end" id="buttom-panel" style="float: right;">
+                            @if (this.User.IsInRole("Admin"))
+                            {
+                            <a asp-controller="FornecedoresAnexos" asp-action="Adicionar" asp-route-id="@Model.IdFornecedor"  class="btn bt-lg btn-primary"><i class="bi bi-upload"></i>&nbsp;Novo Anexo</a>
+                            }
+                        </div>
+
+                        <nav aria-label="breadcrumb d-flex text-start">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a asp-controller="Fornecedores" asp-action="Index">Fornecedor</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row flex-nowrap">
+                <div class="col-12 text-start">
+
+                    <div class="row mb-3 mt-3">
+                        <div class="col-12 col-sm-12 text-start">
+                            @{await Html.RenderPartialAsync("_AlertPartial");}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row flex-nowrap">
+                <div class="col-12 text-start">
+
+                    <input type="hidden" asp-for="IdFornecedor" />
+                    <input type="hidden" asp-for="CreatedUser" />
+                    <input type="hidden" asp-for="CreatedDate" />
+                    <input type="hidden" asp-for="LastUpdate" />
+                    <input type="hidden" asp-for="LastUpdateUser" />
+
+
+                    <div class="row mb-3 mt-3">
+
+                        <div class="col-12 col-sm-3 text-start">
+                            <div class="form-group">
+                                <label asp-for="CNPJ">CNPJ</label>
+                                <input asp-for="CNPJ" class="form-control" maxlength="14" readonly />
+                                <span asp-validation-for="CNPJ" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-9 text-start">
+                            <div class="form-group">
+                                <label asp-for="NomeFantasia">Nome Fantasia</label>
+                                <input asp-for="NomeFantasia" class="form-control" maxlength="200" readonly />
+                                <span asp-validation-for="NomeFantasia" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row mb-3 mt-3">
+                        <div class="col-12">
+                            <hr />
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    @{await Html.RenderPartialAsync("_ViewAnexos");}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

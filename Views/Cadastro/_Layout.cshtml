@@ -1,0 +1,75 @@
+﻿@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Alldux</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYTQJQT0EY"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYTQJQT0EY');
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-211693874-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-211693874-1');
+    gtag('set', {'user_id': '@User.Identity.GetUserId()'}); // Defina o ID de usuário usando o user_id conectado.
+    gtag('set', 'user_properties', { 'plataforma_id' : '@User.Identity.GetUserId()' });
+    </script>
+</head>
+<body class="text-center">
+    
+<header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark navbar-home-alldux">
+        <div class="container">
+            <a class="d-flex align-items-center mb-2 mb-lg-0 navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <img src="~/img/alldux-logo-topo-branco-pq.png" class="logo-topo" border=0 alt="Alldux" />
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Contato">Contato</a>
+                    </li>
+                    
+                    @* @if(ViewBag.ListaFaqCount > 0){
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Ajuda">Ajuda</a>
+                    </li>
+                    } *@
+                </ul>
+
+                <div class="text-end">
+                    <a asp-controller="Cadastro" asp-action="Index" class="btn bt-lg btn-primary">Crie sua conta</a>
+                </div>
+
+            </div>
+        </div>
+        <!--</div>-->
+    </nav>
+</header>
+    
+    @RenderBody()
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>

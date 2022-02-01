@@ -1,0 +1,100 @@
+﻿@model EmailRequest
+
+@{
+    ViewData["Title"] = "Entre em contato";
+}
+
+<div class="row">
+    <div class="container mt-3 px-0">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                <li class="breadcrumb-item">@ViewData["Title"]</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container mb-2 text-center">
+    <h1 class="display-5 fw-bold">@ViewData["Title"]</h1>
+  </div>
+</div>
+
+<div class="row">
+
+    <div class="col-8 offset-2 text-start">
+        <form asp-action="SendMessage" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row g-3">
+                <div class="col-6">
+                    <label asp-for="Contato.FisrtName" class="form-label">Nome</label>
+                    <input asp-for="Contato.FisrtName" type="text" class="form-control" id="firstName" placeholder="" value="" required>
+                    <span asp-validation-for="Contato.FisrtName" class="text-danger"></span>
+                    <div class="invalid-feedback">
+                       Por favor informe um nome válido
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <label asp-for="Contato.FromEmail" class="form-label">E-mail</label>
+                    <input asp-for="Contato.FromEmail" type="text" class="form-control" id="email" placeholder="" value="" required>
+                    <span asp-validation-for="Contato.FromEmail" class="text-danger"></span>
+                    <div class="invalid-feedback">
+                        Por favor informe um e-mail válido.
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Selecione o motivo do contato ...</label>
+                    <select class="form-select mt-0" id="idSubject" aria-label="Motivo do contato ..." onChange="update()">
+                        <option value="0">Dúvidas</option>
+                        <option value="1">Problemas com Login</option>
+                        <option value="2">Suporte técnico</option>
+                        <option value="3">Ainda não sou cliente, como faço para acessar o sistema?</option>
+                    </select>
+
+                    <input type="text" asp-for="Subject" id="Subject" class="form-control" hidden>
+                </div>
+
+                <div class="col-sm-12">
+                    <label asp-for="Body" class="form-label">Mensagem</label>
+                    <textarea asp-for="Body" class="form-control" id="Body"></textarea>
+                </div>
+
+                <div class="col-sm-6">
+                    <label asp-for="Files" class="control-label">Adicionar anexos</label>
+                    <input asp-for="Files" type="file" id="Files" class="form-control" multiple />
+                </div>
+
+                <div class="col-sm-6" style="padding-top:40px; padding-left:20px">
+                    <div class="form-check">
+                        <input asp-for="chkReceiveInformation" class="form-check-input" type="checkbox" value="true" id="chkReceiveInformation" checked>
+                        <label asp-for="chkReceiveInformation" class="form-check-label" id="chkReceiveInformation">
+                            Desejo receber informações sobre Alldux
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 pt-3 pb-3">
+                <button class="w-100 btn btn-primary btn-lg" type="submit">Enviar mensagem</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        function update() {
+            var select = document.getElementById('idSubject');
+            var option = select.options[select.selectedIndex];
+
+            //document.getElementById('value').value = option.value;
+            document.getElementById('Subject').value = option.text;
+        }
+
+        update();
+
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

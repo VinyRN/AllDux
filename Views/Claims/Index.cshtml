@@ -1,0 +1,46 @@
+@model IEnumerable<System.Security.Claims.Claim>
+
+@{
+    ViewData["Title"] = "Administração: Permissões";
+}
+
+<div class="container mt-3 mb-3">
+    <h1>@ViewData["Title"]</h1>
+    <a asp-action="Create" class="btn bt-lg btn-primary">Novo permissão</a>
+</div>
+
+<div class="container">
+<table class="table table-hover align-middle">
+    <thead>
+    <tr>
+        <th>Usuário</th>
+        <th>Emissor</th>
+        <th>Tipo</th>
+        <th>Valor</th>
+        @if(this.User.IsInRole("Admin")){
+        <th>Ações</th>
+        }
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var claim in Model.OrderBy(x => x.Type))
+    {
+        <tr>
+            <td>@claim.Subject.Name</td>
+            <td>@claim.Issuer</td>
+            <td>@claim.Type</td>
+            <td>@claim.Value</td>
+            @if(this.User.IsInRole("Admin")){
+            <td>
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" name="claimValues" value="@claim.Type;@claim.Value;@claim.Issuer" />
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                        Excluir
+                    </button>
+                </form>
+            </td>
+            }
+        </tr>
+    }
+    </tbody>
+</table>

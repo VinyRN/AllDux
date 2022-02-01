@@ -1,0 +1,54 @@
+@model Faq
+
+@{
+    ViewData["Title"] = "Adicionar Pergunta";
+}
+
+<div class="row">
+  <div class="container mt-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Dashboard</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Faq" asp-action="Index">Ajuda</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+      </ol>
+    </nav>
+  </div>
+
+@{await Html.RenderPartialAsync("_AlertPartial");}
+
+  <div class="container mb-2">
+    <h1>@ViewData["Title"]</h1>
+  </div>
+</div>
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+    <div class="row">
+        <div class="col-10 text-start">
+
+            <div class="row">
+                <div class="col mb-3">
+                    <label asp-for="Pergunta">Pergunta</label>
+                    <input asp-for="Pergunta" class="form-control" />
+                    <span asp-validation-for="Pergunta" class="text-danger"></span>
+                    <div class="invalid-feedback">
+                        A Pergunta é obrigatória.
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Resposta">Resposta</label>
+                <textarea asp-for="Resposta" name="Resposta" id="Textrea_Lead" style="width:100%; height:100px; display:block;"></textarea>
+                <span asp-validation-for="Resposta" class="text-danger"></span>
+                <div class="invalid-feedback">
+                    A Resposta é obrigatória.
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Criar FAQ</button>
+        </div>
+    </div>
+</form>

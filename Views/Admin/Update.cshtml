@@ -1,0 +1,197 @@
+@using alldux_plataforma.Models;
+@inject UserManager<ApplicationUser> userManager;
+@model ApplicationUser
+
+@{
+    ViewData["Title"] = "Editar usuário";
+}
+
+@functions{
+    public async Task<string> GetUserClaim(ApplicationUser user, string claimType){
+        var claims = await userManager.GetClaimsAsync(user);
+        foreach (var item in claims)
+        {
+            if(item.Type == claimType){
+                return item.Value;
+            }
+        }
+        return null;
+    }
+    public async Task<bool> VerifyUserClaim(ApplicationUser user, string claimType, string claimValue){
+        var claims = await userManager.GetClaimsAsync(user);
+        foreach (var item in claims)
+        {
+            if(item.Type == claimType && item.Value == claimValue){
+                return true;
+            }
+        }
+        return false;
+    }
+    public string isChecked(ApplicationUser user, string claimType, string claimValue){
+        if(VerifyUserClaim(user, claimType, claimValue).Result){
+            return "checked";
+        }
+        return "";
+    }
+}
+
+<div class="row">
+  <div class="container pt-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Dashboard</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Negociacoes" asp-action="Index">Administração</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="container mb-2">
+    <h1>@ViewData["Title"]</h1>
+  </div>
+</div>
+
+<form asp-action="Update" method="post">
+
+<div class="row">
+
+<div class="col-6 text-start">
+  
+    <div class="form-group mb-3">
+        <label asp-for="Id"></label>
+        <input asp-for="Id" class="form-control" readonly />
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="UserName">Nome</label>
+        <input asp-for="UserName" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Email">E-mail</label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="PhoneNumber">Telefone</label>
+        <input asp-for="PhoneNumber" class="form-control" />
+    </div>
+    
+    @if(this.User.IsInRole("BrandAdmin"))
+    {
+    <div class="form-group mb-3">
+        <label for="Company">Empresa</label>
+        <input name="Company" class="form-control" value="@Model.Company" readonly />
+    </div>
+    <div class="form-group mb-3">
+        <label for="Cargo">Cargo</label>
+        <input name="Cargo" class="form-control" value="@Model.Cargo" readonly />
+    </div>
+    }else{
+    <div class="form-group mb-3">
+        <label for="Company">Empresa</label>
+        <input name="Company" class="form-control" value="@Model.Company" />
+    </div>    
+    <div class="form-group mb-3">
+        <label for="Cargo">Cargo</label>
+        <input name="Cargo" class="form-control" value="@Model.Cargo" />
+    </div>    
+    }
+    <div class="form-group mb-3">
+        <label asp-for="UserType">Tipo de usuário</label>
+        <select class="form-control" id="UserType" name="UserType">
+            @foreach (var role in ViewBag.Roles)
+            {
+                if(@role.ToString() == "Admin"){
+                    if(this.User.IsInRole("Admin")){
+                        if(role.ToString() == Model.UserType){
+                            <option Selected="selected" Value="@role"> @role </option>
+                        }else{
+                            <option Value="@role"> @role </option>
+                        }
+                    }
+                }else{
+                    if(role.ToString() == Model.UserType){
+                        <option Selected="selected" Value="@role"> @role </option>
+                    }else{
+                        <option Value="@role"> @role </option>
+                    }
+                }
+                
+            }
+        </select>
+    </div>
+
+
+    <div class="form-group mb-3">
+        <label for="CreatedDate">Data de criação</label>
+        <input name="CreatedDate" class="form-control" value="@Model.CreatedDate" readonly />
+    </div>
+
+    @if(this.User.IsInRole("Admin"))
+    {
+    <div class="form-group mb-3">
+        <label for="CreatedId">Usuário pai</label>
+        <input name="CreatedId" class="form-control" value="@Model.CreatedId" readonly />
+    </div>
+    <div class="form-group mb-3">
+        <label for="Settings">Data do último login</label>
+        <input name="Settings" class="form-control" value="@await GetUserClaim(Model, "Meta_LastLogin")" readonly />
+    </div>
+    }
+    <div class="form-group mb-3">
+        <label for="password">Senha</label>
+        <input name="password" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Atualizar</button>
+
+</div>
+
+@if(this.User.IsInRole("Admin")){
+<div class="col-3">
+    <div class="card mt-4">
+        <div class="card-header">
+            Áreas de acesso
+        </div>
+        <div class="card-body p-0">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input btn-lg" type="checkbox" id="Content_DiretrizesClinicas" name="Content_DiretrizesClinicas" @isChecked(Model, "Content_DiretrizesClinicas", "True")>
+                        <label class="form-check-label" for="Content_DiretrizesClinicas">Diretrizes Clínicas</label>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input btn-lg" type="checkbox" id="Content_DiretrizesPrecificadas" name="Content_DiretrizesPrecificadas" @isChecked(Model, "Content_DiretrizesPrecificadas", "True")>
+                        <label class="form-check-label" for="Content_DiretrizesPrecificadas">Diretrizes Precificadas</label>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input btn-lg" type="checkbox" id="Content_PadronizacaoInsumos" name="Content_PadronizacaoInsumos" @isChecked(Model, "Content_PadronizacaoInsumos", "True")>
+                        <label class="form-check-label" for="Content_PadronizacaoInsumos">Padronização de Insumos</label>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input btn-lg" type="checkbox" id="Content_Negociacoes" name="Content_Negociacoes" @isChecked(Model, "Content_Negociacoes", "True")>
+                        <label class="form-check-label" for="Content_Negociacoes">Negociações</label>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input btn-lg" type="checkbox" id="Content_FerramentasAnalises" name="Content_FerramentasAnalises" @isChecked(Model, "Content_FerramentasAnalises", "True")>
+                        <label class="form-check-label" for="Content_FerramentasAnalises">Ferramentas de Análises</label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+}
+
+<div class="col-6">
+    <div asp-validation-summary="All" class="text-danger"></div>
+</div>
+
+</div>
+
+</form>

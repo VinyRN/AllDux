@@ -1,0 +1,178 @@
+@model DiretrizPrecificadaTabela
+@using System.Globalization;
+
+@{
+    ViewData["Title"] = "Diretrizes Precificadas";
+}
+
+<div class="row">
+  <div class="container mt-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Diretrizes" asp-action="Index">Diretrizes</a></li>
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="DiretrizesPrecificadas" asp-action="Editar" asp-route-id="@ViewBag.DiretrizPrecificadaId" >Diretrizes Precificadas</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Diretrizes Precificadas - Adicionar Tabela</li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="container mb-4">
+    <h1>Precificação de Protocolos: @ViewBag.Titulo</h1>
+  </div>
+</div>
+
+<form method="post">
+  <div class="row">
+  <div class="col-12 text-start">
+
+    <div id="tabelas">
+      
+      <div class="table-responsive" id="div_tabela_@ViewBag.Indice">
+      <table class="table table-hover align-middle table-diretrizes-precificadas tabelaDrop" id="tabela_@(ViewBag.Indice)">
+      <thead>
+        <th colspan="12" class="table-destaque">
+        <div class="form-group mb-3">
+          <label name="Titulo">Titulo da Tabela</label>
+          <input name="Titulo" class="form-control tituloTabela" maxlength="250" />
+        </div>
+        </th>
+      </tr>
+        <tr>
+          <th colspan="6" class="table-destaque">
+          <div class="form-group mb-3">
+            <label name="Linha">Linha</label>
+            <input name="Linha" class="form-control campoLinha" maxlength="40" />
+          </div>
+          </th>
+          <th colspan="6" class="table-destaque">
+          <div class="form-group mb-3">
+            <label name="Finalidade">Finalidade</label>
+            <input name="Finalidade" class="form-control campoFinalidade" maxlength="40" />
+          </div>
+          </th>
+        </tr>
+        <tr>
+          <th colspan="12" class="table-destaque">
+          <div class="form-group mb-3">
+            <label name="Titulo">Nome do Protocolo</label>
+            <input name="ChaveTabela" class="form-control chaveTabela" style="min-width:100px;" placeholder="Nome do protocolo" data-bs-toggle="tooltip" data-bs-placement="top" title="Insira o nome do Protocolo de acordo com as boas práticas" maxlength="800" />
+          </div>
+        </th>
+        </tr>
+        <tr>
+          <th colspan="6" class="table-destaque">
+          <div class="form-group mb-3">
+            <label name="ChaveTabelaReduzida">Nome Curto</label>
+            <input name="ChaveTabelaReduzida" class="form-control chaveTabelaReduzida" style="min-width:100px;" value="@Model.ChaveTabelaReduzida" maxlength="500" />
+          </div>
+          </th>
+          <th colspan="6" class="table-destaque">
+          <div class="form-group mb-3">
+            <label name="Observacoes">Observações</label>
+            <input name="Observacoes" class="form-control campoObs" style="min-width:100px;" value="@Model.Observacoes" maxlength="6000" />
+          </div>
+          </th>
+        </tr>
+        <tr>
+          <th><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-up" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5zm-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5z"/>
+</svg></th>
+          <th>Ordem</th>
+          <th>Medicamento</th>
+          <th>mg ou ml<br /> mg/kg ou mg/m²</th>
+          <th>Dias<br /> p/ciclo</th>
+          <th>SC<br /> ou Peso</th>
+          <th>Dose<br /> Final</th>
+          <th>Valor ml/mg Alldux</th>
+          <th>Valor ciclo</th>
+          <th>Ciclos</th>
+          <th>Valor total ciclos</th>
+          <th><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+  <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+</svg></th>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+    </div>
+    </div> <!-- tabelas -->
+
+    <div class="form-group">
+      <button type="button" onclick="enviaTabela('create')" id="gravaTabelaBtn" class="btn btn-primary">Gravar Tabela</button>
+      <button type="button" class="btn btn-secondary" id="novoRegistro_@ViewBag.Indice" onclick="AdicionaRegistro(@ViewBag.Indice)">Adicionar Registro</button>
+      <button type="button" class="btn btn-secondary" id="novoRegistro_@ViewBag.Indice" onclick="AdicionaQuebra(@ViewBag.Indice)">Adicionar Divisor</button>
+    </div>
+
+      <input type="hidden" name="Index" id="Index" value="@ViewBag.Indice" />
+      <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+      <input type="hidden" name="DiretrizPrecificadaId" id="DiretrizPrecificadaId" value="@ViewBag.DiretrizPrecificadaId" />
+  </div>
+  </div>
+</form>
+
+<!-- Modal -->
+<div class="modal fade" id="addMedicamentoModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Associar Medicamento</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+          <table class="table table-hover align-middle" id="TabelaMedicamentosDiretrizes">
+            <thead>
+              <tr onclick="selecionaMedicamento()">
+                <th>TISS</th>
+                <th>Princ. Ativo - Nome</th>
+                <th>Apresentação</th>
+                <th>Laboratório</th>
+                <th>+</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              @if(ViewBag.ListaMedicamentos != null){
+                @foreach (var item in ViewBag.ListaMedicamentos)
+                {
+                  @foreach (var variacao in item.Variacoes)
+                  {
+                  <tr><!-- @item.Id - @variacao.Id -->
+                    <td>@variacao.TISS</td>
+                    <td>@item.PrincipioAtivo - @variacao.Nome</td>
+                    <td>@variacao.UnApresentacao @variacao.UnApresentacaoTipo / @variacao.UnMedida @variacao.UnMedidaTipo</td>
+                    <td>@variacao.Laboratorio</td>
+                    <td><button type="button" id="btSelecionaMedicamento" class="btn btn-primary" onclick="selecionaMedicamento('@variacao.TISS', '@item.PrincipioAtivo', '@variacao.PrecoAllduxMg().ToString()')">+</button></td>
+                  </tr>
+                  }
+                }
+              }
+            </tbody>
+          </table>
+
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11; margin-right: 60px;">
+  <div id="confirma" class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">Tabela gravada com sucesso!</div>
+      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <script src="~/js/DiretrizesPrecificadas.js" asp-append-version="true"></script>
+  @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

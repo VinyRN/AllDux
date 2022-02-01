@@ -1,0 +1,42 @@
+﻿@using alldux_plataforma.Models;
+@inject UserManager<ApplicationUser> userManager;
+@model ApplicationUser
+
+@{ ViewData["Title"] = "Hub de Negociações"; }
+
+
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+
+        @{await Html.RenderPartialAsync("_MenuHubPartial");}
+
+        <div class="col py-3" style="margin-left:20px;">
+            <div class="row flex-nowrap">
+                <div class="col-6 text-start">
+                    <div class="container-fluid mt-3 px-0">
+                        <nav aria-label="breadcrumb d-flex text-start">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row flex-nowrap">
+                <div class="col-12 text-start">
+                    <div class="container mb-2 text-center">
+                        <h1 class="display-5 fw-bold">@ViewData["Title"]</h1>
+                        <div class="col-lg-11 mx-auto">
+                            <p class="lead mb-4">
+                                Os valores apresentados refletem os melhores preços de distribuidores qualificados pela equipe do ALLDUX. Os valores podem variar de acordo com a alíquota de cada estado e estão sujeitos à disponibilidade de estoque e faturamento mínimo na data da consulta.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,112 @@
+@using System.Security.Claims
+@using alldux_plataforma.Models
+@model IEnumerable<ApplicationUser>
+
+@{
+    if(this.User.IsInRole("Admin")){
+        ViewData["Title"] = "Administração: usuários";
+    }else{
+        ViewData["Title"] = "Administração: usuários de " + @ViewBag.Company;
+    }
+}
+
+@functions{
+    public string isChecked(bool userActive){
+        if(userActive){
+            return "checked";
+        }
+        return "";
+    }
+}
+
+
+<div class="container pt-3 mb-3">
+    <h1>@ViewData["Title"]</h1>
+    <a asp-action="Create" class="btn bt-lg btn-primary">Novo usuário</a>
+</div>
+
+<div class="container">
+<table class="table table-hover align-middle" id="admin-index">
+    <thead>
+    <tr>
+        <th>Nome</th>
+        <th>E-mail</th>
+        <th>Telefone</th>
+        <th>Empresa</th>
+        <th>Grupos</th>
+        <th>Ativo</th>
+        <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (ApplicationUser user in Model)
+    {
+        @if(this.User.IsInRole("Admin")){
+            <tr>
+                <td>
+                    <p class="mb-0">@user.UserName</p>
+                    <p class="user-id mb-0">@user.Id</p>
+                </td>
+                <td>@user.Email</td>
+                <td>@user.PhoneNumber</td>
+                <td>@user.Company</td>
+                <td>@user.UserType</td>
+                <td>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="UserActiveSwitch" data-id="@user.Id" @isChecked(user.Active) onclick="ativaUser(this)" />
+                    </div>
+                </td>
+                <td>
+                    <div class=btn-toolbar>
+                        <form asp-action="Update" asp-route-id="@user.Id" method="get" class=btn-group>
+                            <button type="submit" class="btn btn-outline-primary"><span class="glyphicon glyphicon-search"></span>Editar</button>
+                            <i></i>
+                        </form>
+                        <form asp-action="Delete" asp-route-id="@user.Id" method="post" class=btn-group>
+                            <i></i>
+                            <button type="submit" class="btn btn-outline-danger">Excluir</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        }else if(ViewBag.Company == user.Company && user.UserType != "Admin"){
+            <tr>
+                <td>
+                    <p class="mb-0">@user.UserName</p>
+                </td>
+                <td>@user.Email</td>
+                <td>@user.PhoneNumber</td>
+                <td>@user.Company</td>
+                <td>@user.UserType</td>
+                <td>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="UserActiveSwitch" data-id="@user.Id" @isChecked(user.Active) onclick="ativaUser(this)" />
+                    </div>
+                </td>
+                <td>
+                    <div class=btn-toolbar>
+                        <form asp-action="Update" asp-route-id="@user.Id" method="get" class="btn-group">
+                            <button type="submit" class="btn btn-outline-primary"><span class="glyphicon glyphicon-search"></span>Editar</button>
+                            <i></i>
+                        </form>
+                        <form asp-action="Delete" asp-route-id="@user.Id" method="post" class="btn-group">
+                            <i></i>
+                            <button type="submit" class="btn btn-outline-danger">Excluir</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        }
+    
+    }
+    </tbody>
+</table>
+
+</div>
+
+@section Scripts {
+  <script src="~/js/Admin.js" asp-append-version="true"></script>
+  @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+

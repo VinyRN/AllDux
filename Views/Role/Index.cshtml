@@ -1,0 +1,47 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@model IEnumerable<IdentityRole>
+
+@{
+    ViewData["Title"] = "Administração: Grupos";
+}
+
+<div class="container mt-3 mb-3">
+    <h1>@ViewData["Title"]</h1>
+    <a asp-action="Create" class="btn bt-lg btn-primary">Novo grupo</a>
+</div>
+
+<div class="container">
+<table class="table table-hover align-middle">
+    <thead>
+    <tr>
+        <th>Nome</th>
+        <th>Usuários</th>
+        <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var role in Model)
+    {
+        <tr>
+            <td>
+                <p class="mb-0">@role.Name</p>
+                <p class="mb-0 user-id">@role.Id</p>
+            </td>
+            <td i-role="@role.Id"></td>
+            <td>
+                <div class=btn-toolbar>
+                <form asp-action="Update" asp-route-id="@role.Id" method="get" class=btn-group>
+                    <button type="submit" class="btn btn-outline-primary">
+                        <span class="glyphicon glyphicon-search"></span>Editar</button>
+                    <i></i>
+                </form>
+                <form asp-action="Delete" asp-route-id="@role.Id" method="post" class=btn-group>
+                    <i></i>
+                    <button type="submit" class="btn btn-outline-danger">Excluir</button>
+                </form>
+                </div>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

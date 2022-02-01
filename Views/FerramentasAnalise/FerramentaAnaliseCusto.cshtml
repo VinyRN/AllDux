@@ -1,0 +1,347 @@
+@model FerramentaAnaliseCusto
+
+@{
+    ViewData["Title"] = "Ferramenta de Análise de Custo";
+}
+
+<div class="row">
+  <div class="container mt-3">
+    <div class="d-flex text-end" id="buttom-panel" style="float: right;">
+    </div>
+    <nav aria-label="breadcrumb d-flex text-start">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+      </ol>
+    </nav>
+  </div>
+
+  @{await Html.RenderPartialAsync("_AlertPartial");}
+
+  <div class="container mb-2 text-center col-lg-12 offset-lg-0 col-xl-10 offset-xl-1 col-xxl-8 offset-xxl-2">
+    <h1 class="display-5 fw-bold">@ViewData["Title"]</h1>
+    <p>Com base nos dados do paciente (peso, altura e AUC), a ferramenta permite analisar o custo dos protocolos que estão nas diretrizes versus o valor de faturamento com tabelas atualizadas - Brasíndice e TNUMM - e conforme o ICMS do estado.</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12 offset-lg-0 col-xl-10 offset-xl-1 col-xxl-8 offset-xxl-2 mt-3">
+
+    <form method="POST">
+
+    <div class="card mb-3">
+      <div class="card-header">Informações do protocolo</div>
+        <div class="card-body">
+          <input type="hidden" name="DiretrizNome" value="" />
+          <select class="form-select form-select-lg mb-3" id="SelectProtocolo" name="DiretrizPrecificadaId" onchange="carregaSelectTabela(this)" required>
+            <option value="" selected>Selecione o Protocolo</option>
+              @foreach (var item in ViewBag.ListaProtocolos)
+              {
+                if(item.DiretrizPrecificada != null){
+                  string Titulo = item.Titulo.Length > 80 ? item.Titulo.Substring(0, 77)+" ..." : item.Titulo;
+                  <option value="@item.DiretrizPrecificada.Id">@Titulo</option>
+                }
+              }
+            </select>
+          
+          <select class="form-select form-select-lg" id="SelectTabela" name="DiretrizPrecificadaTabelaId" disabled required>
+            <option value="" selected></option>
+          </select>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header">Dados do paciente</div>
+        <div class="card-body">
+          <div class="row">
+            <div class="input-group col">
+              <span class="input-group-text">Peso</span>
+              <input type="number" class="form-control" name="Peso" id="peso" min="1" max="999" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onblur="calculaSC()" required>
+              <span class="input-group-text">kg</span>
+            </div>
+            <div class="input-group col">
+              <span class="input-group-text">Altura</span>
+              <input type="number" class="form-control" name="Altura" id="altura" min="1" max="999" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onblur="calculaSC()" required>
+              <span class="input-group-text">cm</span>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="input-group col">
+              <span class="input-group-text">SC</span>
+              <input type="text" class="form-control" id="sc" name="SC" data-bs-toggle="tooltip" data-bs-placement="top" title="Superficie corporal (m²) - DuBois" readonly />
+              <span class="input-group-text">m²</span>
+            </div>
+            <div class="input-group col">
+              <span class="input-group-text">Dose de Carboplatina</span>
+              <input type="text" class="form-control" id="auc" name="AUC" data-bs-toggle="tooltip" data-bs-placement="top" title="Clique em 'Calcular' para abrir a calculadora" onkeypress="return event.charCode >= 46 && event.charCode <= 57 && event.charCode != 47" />
+              <span class="input-group-text">mg</span>
+              <button class="btn btn-outline-secondary" type="button" id="CalcularAUC" data-bs-toggle="modal" data-bs-target="#CalculaAUC">Calcular</button>
+            </div>
+          </div>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header">Informações adicionais</div>
+        <div class="card-body">
+          <div class="row">
+            <div class="mb-3 row">
+              <label for="" class="col-sm-3 col-form-label">Tipo de acesso</label>
+              <div class="col-sm-6">
+                <select class="form-select form-select" name="TipoAcesso">
+                  @foreach (var item in Model.ListaTiposAcesso)
+                  {
+                      <option value="@item.Id">@item.Nome</option>
+                  }
+                </select>
+              </div>
+              <div class="col-sm-3">
+                  <select class="form-select form-select" name="UF" required>
+                    <option value="">UF</option>
+                    <option value="AC">Acre</option>
+                    <option value="AL">Alagoas</option>
+                    <option value="AP">Amapá</option>
+                    <option value="AM">Amazonas</option>
+                    <option value="BA">Bahia</option>
+                    <option value="CE">Ceará</option>
+                    <option value="DF">Distrito Federal</option>
+                    <option value="ES">Espírito Santo</option>
+                    <option value="GO">Goiás</option>
+                    <option value="MA">Maranhão</option>
+                    <option value="MT">Mato Grosso</option>
+                    <option value="MS">Mato Grosso do Sul</option>
+                    <option value="MG">Minas Gerais</option>
+                    <option value="PA">Pará</option>
+                    <option value="PB">Paraíba</option>
+                    <option value="PR">Paraná</option>
+                    <option value="PE">Pernambuco</option>
+                    <option value="PI">Piauí</option>
+                    <option value="RJ">Rio de Janeiro</option>
+                    <option value="RN">Rio Grande do Norte</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                    <option value="RO">Rondônia</option>
+                    <option value="RR">Roraima</option>
+                    <option value="SC">Santa Catarina</option>
+                    <option value="SP">São Paulo</option>
+                    <option value="SE">Sergipe</option>
+                    <option value="TO">Tocantins</option>
+                  </select>
+              </div>
+            </div>
+
+            <div class="mb-3 row">
+              <label for="" class="col-sm-3 col-form-label">Custo operacional</label>
+              <div class="col-sm-4">
+                <div class="input-group">
+                  <span class="input-group-text">%</span>
+                  <input type="text" class="form-control" name="CustoOperacionalPercent">
+                </div>
+              </div>
+                <div class="col-sm-1 text-center mt-2">
+                  ou
+                </div>
+                <div class="col-sm-4">
+                  <div class="input-group">
+                    <span class="input-group-text">R$</span>
+                    <input type="text" class="form-control" name="CustoOperacionalCalculado" id="CustoOperacionalCalculado">
+                    <button class="btn btn-outline-secondary" type="button" id="CalculaCustoOperacional" data-bs-toggle="modal" data-bs-target="#CustoOperacional">Calcular</button>
+                  </div>  
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+              <label for="" class="col-sm-3 col-form-label">Tabela de medicamento</label>
+              <div class="col-sm-6">
+                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                  <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" onclick='selecionaComparacao("PMC")' checked>
+                  <label class="btn btn-outline-primary" for="btnradio1">Brasíndice PMC</label>
+
+                  <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" onclick='selecionaComparacao("PFB")'>
+                  <label class="btn btn-outline-primary" for="btnradio2">Brasíndice PFB</label>
+
+                  <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" onclick='selecionaComparacao("TNUMM")'>
+                  <label class="btn btn-outline-primary" for="btnradio3">TNUMM</label>
+
+                  <input type="hidden" id="brasindice" name="Brasindice" value="PMC" />
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="input-group invisible" id="PercentPF">
+                  <span class="input-group-text">%</span>
+                  <input type="text" class="form-control" name="PercentPF">
+                </div>
+              </div>
+            </div>
+          </div>
+          
+      </div>
+    </div>
+
+    <div class="card bg-light">
+      <div class="card-body text-center">
+        <button type="submit" class="btn btn-primary btn-lg">Exibir Relatório</button>
+      </div>
+    </div>
+
+    <div asp-validation-summary="All" class="text-danger mt-4"></div>
+
+    </form>
+
+
+    <!-- Modal AUC -->
+    <div class="modal fade" id="CalculaAUC" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Dose de Carboplatina (mg)</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body col-8 offset-2">
+
+              <form id="CalculoAUC">
+
+              @* <div class="row mb-3 align-items-center">
+                <div class="col-sm-5"><label for="AUC-alvo">AUC Alvo (mg/ml.min)</label></div>
+                 <div class="col-sm-7">
+                  <input type="number" class="form-control" id="AUC-alvo" min="1" max="20" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                 </div>
+              </div> *@
+
+              <div class="row mb-3 align-items-center">
+                <div class="col-sm-5"><label for="AUC-Alvo">AUC Alvo</label></div>
+                <div class="col-sm-7">
+                  <input type="number" class="form-control" id="AUC-Alvo" min="1" max="150" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                </div>
+              </div>
+
+              <div class="row mb-3 align-items-center">
+                <div class="col-sm-5"><label for="AUC-genero">Gênero</label></div>
+                <div class="col-sm-7">
+                  <select class="form-select form-select" id="AUC-genero">
+                    <option value="1">Masculino</option>
+                    <option value="0.85">Feminino</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="row mb-3 align-items-center">
+                <div class="col-sm-5"><label for="AUC-idade">Idade</label></div>
+                <div class="col-sm-7">
+                  <input type="number" class="form-control" id="AUC-idade" min="1" max="150" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                </div>
+              </div>
+
+              <div class="row mb-3 align-items-center">
+                <div class="col-sm-5"><label for="AUC-creatina">Creatina Sérica (mg/dL)</label></div>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="AUC-creatina" min="1" max="999" onkeypress="return event.charCode >= 46 && event.charCode <= 57 && event.charCode != 47" required>
+                </div>
+              </div>
+
+              <div class="row mb-3 align-items-center">
+                <div class="col-sm-5"><label for="AUC-peso">Peso (kg)</label></div>
+                <div class="col-sm-7">
+                  <input type="number" class="form-control" id="AUC-peso" min="1" max="999" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                </div>
+              </div>
+
+              <div class="input-group mb-3">
+                <button class="btn btn-outline-secondary" type="submit" id="AUC-calcula">Calcular</button>
+                <input type="text" class="form-control" placeholder="" id="AUC-resultado">
+                <span class="input-group-text">mg</span>
+              </div>
+
+              <small>*Cálculo de dose com base no AUC (Fórmula de Calvert)</small>
+
+              </form>
+            </div>
+
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            <button type="button" class="btn btn-primary" onclick="preencheAUC()">Usar valores</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Custo Operacional -->
+    <div class="modal fade" id="CustoOperacional" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Cálculo do custo operacional</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body col-8 offset-2">
+              <p>Para calcular o custo operacional, basta colocar o valor médio de suas despesas (folha de pagamento, infraestrutura e custos relacionados à operação, excluindo os valores de materiais e medicamentos).</p>
+              
+              <form id="CalculoCusto">
+
+              <div class="row mb-3 align-items-center">
+                <div class="col-sm-5"><label for="TotalTratamentos">Total de tratamentos mensais</label></div>
+                 <div class="col-sm-7">
+                  <input type="number" class="form-control" id="TotalTratamentos" min="1" max="9999" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required />
+                 </div>
+              </div>
+              
+              <div class="row mb-3 align-items-center">
+                <div class="col-sm-5"><label for="TotalCusto">Valor total do custo</label></div>
+                 <div class="col-sm-7">
+                  <input type="number" class="form-control" id="TotalCusto" min="1" max="9999999" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required />
+                 </div>
+              </div>
+
+              <div class="input-group mb-3">
+                <button class="btn btn-outline-secondary" type="submit" id="AUC-calcula">Calcular</button>
+                <input type="text" class="form-control" placeholder="" id="Custo-resultado" />
+              </div>
+
+              </form>
+
+            </div><!-- modal-body -->
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            <button type="button" class="btn btn-primary" onclick="preencheCusto()">Usar valores</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  <div class="modal fade" id="OnLoad" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">@ViewData["Title"]</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center">
+              <h5>
+                A Ferramenta de Análise de Custo<br /> permite, ao gestor: <br /><br />
+                &bull; conhecer seus custos <br />
+                &bull; analisar suas margens de lucro <br />
+                &bull; propor novos modelos de negociação <br />
+                &bull; montar orçamentos particulares
+                </h5>
+            </div><!-- modal-body -->
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+
+  </div><!-- /conteudo -->
+</div><!-- row -->
+
+@section Scripts {
+  <script src="~/js/FerramentaAnaliseCusto.js" asp-append-version="true"></script>
+  @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

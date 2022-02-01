@@ -1,0 +1,86 @@
+@using System.Security.Claims
+@using alldux_plataforma.Models
+@model IEnumerable<ApplicationUser>
+
+@{
+    ViewData["Title"] = "Usuários Trial";
+}
+
+@functions{
+    public string isChecked(bool userActive){
+        if(userActive){
+            return "checked";
+        }
+        return "";
+    }
+}
+
+@{await Html.RenderPartialAsync("_AlertPartial");}
+
+<div class="container pt-3 mb-3">
+    <h1>@ViewData["Title"]</h1>
+    @* <a asp-action="Create" class="btn bt-lg btn-primary">Novo usuário</a> *@
+</div>
+
+<div class="container">
+<table class="table table-hover align-middle" id="admin-index">
+    <thead>
+    <tr>
+        <th>Nome</th>
+        <th>Email/Tel</th>
+        <th>Empresa</th>
+        <th>Gestor</th>
+        <th>Inicio/Fim</th>
+        <th>Ativo</th>
+        <th>Enviar E-mail</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (ApplicationUser user in Model)
+    {
+        @if(this.User.IsInRole("Admin") && @user.UserType == "TestUser"){
+            
+            <tr>
+                <td>
+                    <p class="mb-0">@user.UserName</p>
+                    <p class="user-id mb-0">@user.Id</p>
+                </td>
+                <td>
+                    @user.Email<br />
+                    @user.PhoneNumber
+                </td>
+                <td>
+                    @user.Company<br />
+                    @user.Cargo
+                </td>
+                <td>
+                    @user.NomeGestor<br />
+                    @user.TelGestor
+                </td>
+                <td>
+                    @user.CreatedDate<br />
+                    @user.CreatedDate.AddDays(15)
+                </td>
+                <td>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="UserActiveSwitch" data-id="@user.Id" @isChecked(user.Active) onclick="ativaUser(this)" />
+                    </div>
+                </td>
+                <td>
+                    <form asp-action="Trial" asp-route-id="@user.Id" method="post" class="btn-group">
+                        <button type="submit" class="btn btn-outline-danger">Enviar</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    
+    }
+    </tbody>
+</table>
+
+</div>
+
+@section Scripts {
+  <script src="~/js/Admin.js" asp-append-version="true"></script>
+  @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

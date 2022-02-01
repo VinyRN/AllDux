@@ -1,0 +1,26 @@
+@if(this.User.IsInRole("TestUser")){
+<div class="alert alert-dark mb-2 fade show" id="alerta" role="alert">
+  <div class="col-10">
+  @if(ViewContext.RouteData.Values["Controller"].ToString() == "Diretrizes") 
+    @Html.Raw("Você está acessando uma versão Trial, que permite a visualização dos <strong>Protocolos Livres</strong> e de outros 3: <strong>Câncer de Mama</strong>, <strong>Câncer do Trato Gastrointestinal - Câncer de Cólon</strong> e <strong>Câncer de Pulmão – Não Pequenas Células</strong>.")
+
+  @if(ViewContext.RouteData.Values["Controller"].ToString() == "PadronizacaoInsumos") 
+    @Html.Raw("Você está acessando uma versão Trial, que permite a visualização alguns dos <strong>mais de 250 insumos</strong> padronizados pelo Alldux.")
+
+  @if(ViewContext.RouteData.Values["Controller"].ToString() == "Negociacoes") 
+    @Html.Raw("Você está acessando uma versão Trial, na qual é possível conferir até 5 importantes negociações. <br />A Plataforma oferece, atualmente, mais de 250 negociações.")
+
+  @if(ViewContext.RouteData.Values["Controller"].ToString() == "FerramentasAnalise") 
+    @Html.Raw("Você está acessando uma versão Trial, que permite o cálculo de 3 protocolos: <strong>Câncer de Mama</strong>, <strong>Câncer do Trato Gastrointestinal - Câncer de Cólon</strong> e <strong>Câncer de Pulmão – Não Pequenas Células</strong>.")
+  </div>
+   
+  <button type="button" class="btn-close position-absolute end-0 top-0 py-3 px-3" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+}
+
+@if(TempData["alerta"] != null){
+<div class="alert alert-@TempData["tipo"] alert-dismissible fade show" id="alerta" role="alert">
+  @TempData["alerta"]
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+}

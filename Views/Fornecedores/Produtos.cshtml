@@ -1,0 +1,91 @@
+﻿
+@model IEnumerable<FornecedoresProduto>
+
+@{ ViewData["Title"] = "Produtos Fornecedor"; }
+
+<div class="container-fluid">
+
+    <div class="row flex-nowrap">
+
+        @{await Html.RenderPartialAsync("_MenuHubPartial");}
+
+        <div class="col py-3">
+
+            <div class="table-responsive">
+                <div class="container mt-3">
+                    <nav aria-label="breadcrumb d-flex text-start">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+
+                            @if (Model != null)
+                            {
+                                <li class="breadcrumb-item"><a asp-controller="Fornecedores" asp-action="Fornecedores" asp-route-id="@Model.ToList()[0].IdFornecedor">Fornecedores</a></li>
+                            }
+                            else
+                            {
+                                <li class="breadcrumb-item"><a asp-controller="Fornecedores" asp-action="Fornecedores" >Fornecedores</a></li>
+                            }
+
+
+                            <li class="breadcrumb-item active" aria-current="page">Lista de Produto(s) Fornecedor</li>
+                        </ol>
+                    </nav>
+                </div>
+
+                @{await Html.RenderPartialAsync("_AlertPartial");}
+
+            </div>
+
+            <div class="table-responsive">
+                <div class="container mt-3">
+
+                    <table class="table table-hover padronizacao-insumos" id="Medicamentos">
+                        <thead style="text-align: justify">
+                            <tr>
+                                <th>Principio Ativo</th>
+                                <th>Nome Comercial</th>
+                                <th>Apresentação</th>
+                                <th>Estoque</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody style="vertical-align: middle; text-align: justify;">
+
+                            @foreach (FornecedoresProduto ObjProdItem in Model)
+                            {
+                                <tr>
+                                    <td>@ObjProdItem.PrincipioAtivo</td>
+                                    <td>@ObjProdItem.Nome</td>
+                                    <td>@ObjProdItem.Apresentacao</td>
+                                    <td>@ObjProdItem.Estoque</td>
+                                    @if (@ObjProdItem.Status == 1)
+                                    {
+                                        <td>Ag. Aprovação</td>
+                                    }
+                                    else if (@ObjProdItem.Status == 2)
+                                    {
+                                        <td>Aprovado</td>
+                                    }
+                                    else
+                                    {
+                                        <td>Cancelado</td>
+                                    }
+
+                                </tr>
+
+                              }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+

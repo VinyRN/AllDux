@@ -1,0 +1,180 @@
+@model Medicamento
+
+@{
+    ViewData["Title"] = "Adicionar Medicamento";
+}
+
+<div class="row">
+  <div class="container mt-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Dashboard</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Medicamentos" asp-action="Index">Medicamentos</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+      </ol>
+    </nav>
+  </div>
+
+@{await Html.RenderPartialAsync("_AlertPartial");}
+
+  <div class="container mb-2">
+    <h1>@ViewData["Title"]</h1>
+  </div>
+</div>
+
+<form method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="row">
+        <div class="col-10 text-start">
+
+            <div class="row">
+                <div class="col mb-3">
+                    <label asp-for="PrincipioAtivo">Principio Ativo</label>
+                    <input asp-for="PrincipioAtivo" class="form-control" />
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="DescricaoCurta">Descricao (curta)</label>
+                    <input asp-for="DescricaoCurta" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Descricao">Descricao (longa)</label>
+                <textarea asp-for="Descricao" name="Descricao" id="Textrea_Lead" style="width:100%; height:100px; display:block;"></textarea>
+            </div>
+
+            <div id="variacoes-container">
+                <h3>Variações</h3>
+                <div id="variacoes">
+
+                    <div id="variacao_0" class="variacao p-3 mb-2">
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label name="Variacoes[0].Nome">Nome</label>
+                                <input name="Variacoes[0].Nome" class="form-control" />
+                            </div>
+                            <div class="col mb-3">
+                                <label name="Variacoes[0].TISS">TISS</label>
+                                <input name="Variacoes[0].TISS" class="form-control" />
+                            </div>
+                            <div class="col mb-3">
+                                <label name="Variacoes[0].Laboratorio">Laboratorio</label>
+                                <input name="Variacoes[0].Laboratorio" class="form-control" />
+                            </div>
+                            <div class="col mb-3">
+                                <label name="Variacoes[0].Distribuidor">Distribuidor</label>
+                                <input name="Variacoes[0].Distribuidor" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label name="Variacoes[0].Tipo">Tipo</label>
+                                <input name="Variacoes[0].Tipo" class="form-control" />
+                            </div>
+                            <div class="col mb-3">
+                                <label name="Variacoes[0].Familia">Família</label>
+                                <input type="text" name="Variacoes[0].Familia" class="form-control" />
+                            </div>
+                            <div class="col mb-3">
+                                <label name="Variacoes[0].Classe">Classe</label>
+                                <input  type="text" name="Variacoes[0].Classe" class="form-control" />
+                            </div>
+                            <div class="col mb-3">
+                                <label name="Variacoes[0].Subclasse">Subclasse</label>
+                                <input  type="text" name="Variacoes[0].Subclasse" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label name="Variacoes[0].UnMedida" data-bs-toggle="tooltip" data-bs-placement="top" title="Quantidade na Embalagem">Quantidade</label>
+                                <div class="input-group mb-3">
+                                    <input type="text" name="Variacoes[0].UnMedida" class="form-control" />
+                                    <input list="UnMedida" class="form-control" name="Variacoes[0].UnMedidaTipo" />
+                                    <datalist id="UnMedida">
+                                        <option value="Cp"></option>
+                                        <option value="Caps"></option>
+                                        <option value="Amp"></option>
+                                    </datalist>
+                                </div>
+                            </div>
+
+                            <div class="col mb-3">
+                                <label name="Variacoes[0].UnApresentacao" data-bs-toggle="tooltip" data-bs-placement="top" title="Dose da unidade da embalagem">Posologia</label>
+                                <div class="input-group mb-3">
+                                    <input type="text" name="Variacoes[0].UnApresentacao" class="form-control" />
+                                    <input list="UnApresentacao" class="form-control" name="Variacoes[0].UnApresentacaoTipo" />
+                                    <datalist id="UnApresentacao">
+                                        <option value="mg"></option>
+                                        <option value="ml"></option>
+                                    </datalist>
+                                </div>
+                            </div>
+
+                            <div class="col mb-3">
+                                <label name="Variacoes[0].PrecoMercado">Preço de Mercado</label>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">R$</span>
+                                    <input type="text" name="Variacoes[0].PrecoMercado" class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="col mb-3">
+                                <label name="Variacoes[0].PrecoAlldux">Preço Alldux</label>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">R$</span>
+                                    <input type="text" name="Variacoes[0].PrecoAlldux" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col mb-3 ps-4">
+                                <div class="form-check form-switch mt-2">
+                                    <input class="form-check-input btn-lg" type="checkbox" id="Padronizado_0" name="Padronizado_0" onclick="document.getElementById('Variacoes[0].Padronizado').value = this.checked" />
+                                    <label class="form-check-label" for="Padronizado">Padronizado</label>
+                                    <input type="hidden" value="false" name="Variacoes[0].Padronizado" id="Variacoes[0].Padronizado" />
+                                </div>
+                            </div>
+
+                            <div class="col mb-3 ps-4">
+                                <div class="form-check form-switch mt-2">
+                                    <input class="form-check-input btn-lg" type="checkbox" id="Generico_0" name="Generico_0" onclick="document.getElementById('Variacoes[0].Generico').value = this.checked" />
+                                    <label class="form-check-label" for="Generico">Genérico</label>
+                                    <input type="hidden" value="false" name="Variacoes[0].Generico" id="Variacoes[0].Generico" />
+                                </div>
+                            </div>
+
+                            <div class="col mb-3 ps-4">
+                                <div class="form-check form-switch mt-2">
+                                    <input class="form-check-input btn-lg" type="checkbox" id="Biossimilar_0" name="Biossimilar_0" onclick="document.getElementById('Variacoes[0].Biossimilar').value = this.checked" />
+                                    <label class="form-check-label" for="Biossimilar">Biossimilar</label>
+                                    <input type="hidden" value="false" name="Variacoes[0].Biossimilar" id="Variacoes[0].Biossimilar" />
+                                </div>
+                            </div>
+
+                            <div class="col mb-3 ps-4">
+                                <div class="form-check form-switch mt-2">
+                                    <input class="form-check-input btn-lg" type="checkbox" id="Referencia_0" name="Referencia_0" onclick="document.getElementById('Variacoes[0].Referencia').value = this.checked" />
+                                    <label class="form-check-label" for="Referencia">Referência</label>
+                                    <input type="hidden" value="false" name="Variacoes[0].Referencia" id="Variacoes[0].Referencia" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div><!-- variacao_0 -->
+                </div><!-- variacoes -->
+
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" id="addItem" onclick="AdicionaVariacao()">Adicionar Variação</button>
+                    <button type="button" class="btn btn-outline-danger" id="removeItem" onclick="RemoveVariacao()">Remover Variação</button>
+                </div>
+
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Criar Medicamento</button>
+
+        </div>
+    </div>
+</form>

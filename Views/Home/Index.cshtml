@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "ALLDUX Plataforma ";
+}
+
+<div class="px-4 pt-5 text-center">
+    <h1 class="display-5 pt-5 fw-bold">@ViewData["Title"]</h1>
+    <div class="col-lg-10 mx-auto">
+      <p class="lead mb-4">
+      Big data que usa inteligência artificial para dar sustentabilidade nas padronizações de insumos, como negociações de formas globais e garantia da qualidade, com coletâneas de diretrizes clínicas e o benefício dos protocolos médicos precificados. Todos os itens auxiliam na redução de custo e aumento na margem de lucratividade.
+      </p>
+    </div>
+  </div>
+
+@if (!User.HasClaim("Aceite_PoliticaPrivacidade", "True")){
+  await Html.RenderPartialAsync("_ModalPartial");
+}
+
+  <div class="container px-4 py-5" id="boxes-dashboard">
+    
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-4">
+      <div class="col">
+        <img src="/img/ico_diretrizesclinicas.png" alt="Diretrizes Clínicas" border="0" class="float-end ico-dashboard d-lg-none d-xl-block" />
+        <h2>Diretrizes <br />Clínicas</h2>
+        <p class="text-justify mt-3">
+           Conjunto de protocolos - Oncológico, Hematológico e de Radioterapia - estruturados por um board de especialistas, referenciados em literatura científica e atualizados periodicamente, a fim de garantir a qualidade assistencial e o melhor desfecho clínico.
+        </p>
+      </div>
+      <div class="col">
+        <img src="/img/ico_diretrizesprecificadas.png" alt="Diretrizes Precificadas" border="0" class="float-end ico-dashboard d-lg-none d-xl-block" />
+        <h2>Diretrizes <br />Precificadas</h2>
+        <p class="text-justify mt-3">
+          Dispor de protocolos precificados permite que as instituições de saúde tenham maior controle de sua gestão financeira, conhecendo bem seus custos, assim como suas margens de lucro e de negociação.
+        </p>
+      </div>
+      <div class="col">
+        <img src="/img/ico_padronizacaoinsumos.png" alt="Padronização de Insumos" border="0" class="float-end ico-dashboard d-lg-none d-xl-block" />
+        <h2>Padronização <br />de Insumos</h2>
+        <p class="text-justify mt-3">
+          A padronização de insumos oferece, à área de Compras, valores de cotações de itens negociados, exclusivamente, para clientes ALLDUX. Além do controle de custos na aquisição, a ferramenta também contribui no controle de medicamentos em estoque.
+        </p>
+      </div>
+      <div class="col">
+        <img src="/img/ico_hubnegociacoes.png" alt="Hub de Negociações" border="0" class="float-end ico-dashboard d-lg-none d-xl-block" />
+        <h2>Hub de <br />Negociações</h2>
+        <p class="text-justify mt-3">
+          O hub de negociações do ALLDUX traz, aos seus clientes, negociações de medicamentos com os melhores preços, orientando e facilitando a compra de insumos.
+        </p>
+      </div>
+    </div>
+  </div>
+
+

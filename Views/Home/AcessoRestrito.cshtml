@@ -1,0 +1,32 @@
+@model DiretrizesClinicas
+
+@{
+    ViewData["Title"] = "Acesso restrito";
+}
+
+
+<div class="row">
+  <div class="container mt-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="container mb-2 text-center">
+    <h1 class="display-5 fw-bold">@ViewData["Title"]</h1>
+    <div class="col-lg-6 mx-auto">
+      <p class="lead mb-4">
+        Como você está usando uma conta trial, não consegue visualizar esse conteúdo. Para obter acesso irrestrito entre em contato com <a href="mailto:comercial@alldux.com.br">comercial@alldux.com.br</a>.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        
+    </div>
+</div><!-- row -->

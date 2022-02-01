@@ -1,0 +1,173 @@
+@using System.Globalization
+@model DiretrizPrecificada
+
+@{
+    ViewData["Title"] = "Diretrizes Precificadas";
+    double t1 = 0;
+    double t2 = 0;
+    //NumberFormatInfo provider = new NumberFormatInfo(){NumberDecimalSeparator = ",", NumberGroupSeparator = ".", CurrencyDecimalSeparator = ","};
+}
+
+@functions {
+  public string converte(string t){
+    if(!String.IsNullOrEmpty(t)){
+      double temp = Convert.ToDouble(t.Replace(".", ","), new NumberFormatInfo(){NumberDecimalSeparator = ",", NumberGroupSeparator = ".", CurrencyDecimalSeparator = ","});
+      return string.Format("{0:N}", temp);
+    }
+    return string.Format("{0:N}", 0);
+  }
+}
+
+<div class="row">
+  <div class="container mt-3">
+    <div class="d-flex text-end" id="buttom-panel" style="float: right;">
+        @if(this.User.IsInRole("Admin"))
+        {
+          <a class="btn bt-lg btn-primary" asp-area="" asp-controller="DiretrizesPrecificadas" asp-action="Editar" asp-route-id="@Model.Id"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+</svg> Editar Diretriz</a>
+        }
+    </div>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Diretrizes" asp-action="Index">Diretrizes</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Diretrizes Precificadas</li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="container mb-4">
+    <h1>Precificação de Protocolos: @ViewBag.Titulo</h1>
+    <p>@Html.Raw(Model.Conteudo)</p>
+  </div>
+</div>
+
+<div class="container mb-4">
+
+  @foreach (var tabela in Model.DiretrizPrecificadaTabela)
+  {
+    <div class="table-responsive" id="div_tabela_@(tabela.Index)">
+    
+    <table class="table table-hover align-middle table-diretrizes-precificadas" id="tabela_@(tabela.Index)" data-id="@tabela.Id">
+      <thead>
+        @if(!String.IsNullOrEmpty(tabela.Titulo)){
+        <tr>
+        <th class="table-destaque" colspan="10">
+          <h4>@tabela.Titulo</h4>
+        </th>
+        </tr>
+        }
+        <tr>
+          <th colspan="10">
+          <div class="form-group mb-3">
+            <h6><span class="badge bg-primary"> @tabela.ChaveTabelaReduzida</span> @tabela.ChaveTabela</h6>
+          </div>
+          </th>
+        </tr>
+        <tr>
+          <th>Ordem</th>
+          <th>Medicamento</th>
+          <th>mg ou ml<br /> mg/kg ou mg/m²</th>
+          <th>Dias<br /> p/ciclo</th>
+          <th>SC<br /> ou Peso</th>
+          <th>Dose<br /> Final</th>
+          <th>Valor ml/mg Alldux</th>
+          <th>Valor ciclo</th>
+          <th>Ciclos</th>
+          <th>Valor total ciclos</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        @foreach (var linha in tabela.DiretrizPrecificadaRegistro)
+        {
+          if(linha.Ordem == "#quebra#"){
+            
+          <tr class="calculos" class="bg-light">
+            <td class="bg-light"></td>
+            <td class="bg-light text-start" colspan="8">
+              <strong>@linha.Medicamento</strong>
+            </td>
+            <td class="bg-light"></td>    
+          </tr>
+
+          }else{
+
+          <tr>
+            <td>@linha.Ordem</td>
+            <td>@linha.MedicamentoPrincipioAtivo @linha.Medicamento</td>
+            <td>
+              @if(!String.IsNullOrEmpty(linha.Mgm2)){
+                @string.Format("{0:N}", linha.Mgm2.Replace(".", ","))
+              }
+            </td>
+            <td>@linha.DiasCiclo</td>
+            <td>
+              @if(!String.IsNullOrEmpty(linha.ScPeso)){
+                @string.Format("{0:N}", linha.ScPeso.Replace(".", ","))
+              }
+            </td>
+            <td>
+              @linha.CalcDoseFinal()
+            </td>
+            <td>
+                @* @("R$ " + converte(linha.ValorCpMgAlldux.ToString())) *@
+                @if(linha.ValorCpMgAlldux < 1){
+                  @("R$ " + linha.ValorCpMgAlldux.ToString())
+                }else{
+                  @("R$ " + converte(linha.ValorCpMgAlldux.ToString()))
+                }
+            </td>
+            <td>
+                @("R$ " + converte(linha.CalcValorCiclo().ToString()))
+            </td>
+            <td>@linha.CicloTotal</td>
+            <td>
+              @if(!String.IsNullOrEmpty(linha.CalcValorTotal().ToString()))
+              {
+                @("R$ " + converte(linha.CalcValorTotal().ToString()))
+              }
+            </td>
+          </tr>
+          @if( linha.CalcValorCiclo().ToString() != null ){
+            @* var v1 = linha.ValorCiclo.Replace(".", ",");
+            t1 += Convert.ToDouble(v1, provider); *@
+            t1 += linha.CalcValorCiclo();
+          }
+          @if( linha.CalcValorCiclo().ToString() != null ){
+            @* var v2 = linha.ValorTotal.Replace(".", ",");
+            t2 += Convert.ToDouble(v2, provider); *@
+            t2 += linha.CalcValorTotal();
+          }
+          }
+
+        }
+          <tr class="table-total">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Total</td>
+            <td>R$ @string.Format("{0:N}", t1)</td>
+            <td></td>
+            <td>R$ @string.Format("{0:N}", t2)</td>
+          </tr>
+      </tbody>
+    </table>
+    </div>
+
+    @* Zerando os totais *@ 
+    if(t1 != 0 && t2 != 0){ t1 = 0; t2 = 0; }
+    
+    <div class="container mb-4">
+      @if(!String.IsNullOrEmpty(tabela.Observacoes)){
+        <p>@Html.Raw(tabela.Observacoes)</p>
+      }
+    </div>
+  }
+
+</div>

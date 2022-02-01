@@ -1,0 +1,120 @@
+﻿@model Fornecedores
+
+
+@{ ViewData["Title"] = "Lista de Fornecedores"; }
+
+<div class="container-fluid">
+
+    <div class="row flex-nowrap">
+
+        @{await Html.RenderPartialAsync("_MenuHubPartial");}
+
+        <div class="col py-3">
+
+            <div class="table-responsive">
+                <div class="container mt-3">
+                    <nav aria-label="breadcrumb d-flex text-start">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a asp-area="" asp-controller="Fornecedores" asp-action="Index">Fornecedores</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Lista de Fornecedore(s)</li>
+                        </ol>
+                    </nav>
+                </div>
+
+                @{await Html.RenderPartialAsync("_AlertPartial");}
+
+            </div>
+
+            <div class="row flex-nowrap">
+                <div class="col-12 text-start">
+
+                    <input type="hidden" asp-for="IdFornecedor" />
+
+                    <div class="row mb-3 mt-3">
+
+                        <div class="col-12 col-sm-3 text-start">
+                            <div class="form-group">
+                                <label asp-for="CNPJ">CNPJ</label>
+                                <input asp-for="CNPJ" class="form-control" maxlength="14" readonly />
+                                <span asp-validation-for="CNPJ" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-9 text-start">
+                            <div class="form-group">
+                                <label asp-for="NomeFantasia">Nome Fantasia</label>
+                                <input asp-for="NomeFantasia" class="form-control" maxlength="200" readonly />
+                                <span asp-validation-for="NomeFantasia" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row mb-3 mt-3">
+                        <div class="col-12">
+                            <hr />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <div class="container mt-3">
+
+                    <table class="table table-hover padronizacao-insumos" id="Medicamentos">
+                        <thead style="text-align: justify">
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Qtd Parcela(s)</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody style="vertical-align: middle; text-align: justify;">
+
+
+                            @foreach (var ObjFormaItem in Model.FormasPagamento)
+                            {
+                            <tr>
+                                <td>@ObjFormaItem.Descricao</td>
+                                <td>@ObjFormaItem.QtdParcelas</td>
+                                @if (@ObjFormaItem.Status == 1)
+                                {
+                                    <td>Ativo</td>
+                                }
+                                else
+                                {
+                                    <td>Cancelado</td>
+                                }
+
+                                <td>
+                                    <div class="btn-toolbar justify-content-center align-items-center">
+
+                                        <div class="btn-toolbar justify-content-center align-items-center">
+                                            <a asp-controller="Fornecedores" asp-action="Editar" asp-route-Id="@ObjFormaItem.IdForncedorFormaPag.ToString()" data-toggle="tooltip" title="Editar"><i class="bi bi-pencil-square"></i></a>
+                                        </div>
+
+                                    </div>
+                                </td>
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+

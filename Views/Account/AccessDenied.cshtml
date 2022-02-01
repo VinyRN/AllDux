@@ -1,0 +1,12 @@
+@{
+    ViewData["Title"] = "Acesso restrito";
+}
+
+<div class="container mt-3 mb-3">
+    <h1>@ViewData["Title"]</h1>
+    <p>Você não ter permissão para visualizar essa área.</p>
+</div>
+
+<script>
+    window.location.href = "@Url.Action("Index","Home")";
+</script>

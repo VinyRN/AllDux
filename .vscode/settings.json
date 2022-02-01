@@ -1,0 +1,5 @@
+{
+    "appService.preDeployTask": "publish-release",
+    "appService.deploySubpath": "bin\\Release\\net5.0\\publish",
+    "appService.defaultWebAppToDeploy": "/subscriptions/b1513ce3-dda5-4545-963d-87ed0bb5f4d6/resourceGroups/rg-alldux-plaaforma-us/providers/Microsoft.Web/sites/alldux-plataforma"
+}

@@ -1,0 +1,103 @@
+@model DiretrizesClinicas
+
+@{
+    ViewData["Title"] = "Diretrizes Clinicas";
+}
+
+<div class="row">
+  <div class="container mt-3 px-0">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Diretrizes" asp-action="Index">Diretrizes</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Editar Diretriz</li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="container mb-4 px-0">
+    <h1>Editar Diretriz
+      @if(this.User.IsInRole("Admin")){
+      <a class="btn btn-outline-danger btn-sm" asp-area="" asp-controller="DiretrizesClinicas" asp-action="Remover" asp-route-id="@Model.Id.ToString()">Remover Diretriz</a>
+      }
+    </h1>
+  </div>
+</div>
+
+<form method="post">
+  <div class="row">
+  <div class="col-8 text-start">
+
+    <div class="form-group mb-3">
+        <label asp-for="Titulo">Titulo da Diretriz</label>
+        <input asp-for="Titulo" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Lead">Texto de introdução (Curto)</label>
+        <textarea asp-for="Lead" name="Lead" id="Textrea_Lead" style="width:100%; height:100px; display:block;"></textarea>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Categoria">Categoria</label>
+        <input asp-for="Categoria" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Tags">Tags</label>
+        <input asp-for="Tags" class="form-control" />
+    </div>
+
+    <div id="modulos-container">
+      <div id="modulos">
+        @foreach (var modulo in Model.DiretrizModulo)
+        {
+        <div id="@("modulo"+modulo.Index)" class="pb-3" style="margin-left:20px;">
+          <input type="hidden" name="DiretrizModulo[@(modulo.Index)].Id" value="@modulo.Id" />
+          <input type="hidden" name="DiretrizModulo[@(modulo.Index)].DiretrizesClinicasId" value="@Model.Id" />
+          <input type="hidden" name="DiretrizModulo[@(modulo.Index)].Index" value="@modulo.Index" maxlength="3"/>
+          <div class="form-group mb-3">
+            <label asp-for="@modulo.Titulo">Título do Módulo <button type="button" class="btn btn-outline-danger btn-sm" id="addItem" onclick="RemoveItem(@("modulo"+modulo.Index))">Remove Módulo</button></label>
+            <input asp-for="@modulo.Titulo" name="DiretrizModulo[@(modulo.Index)].Titulo" id="DiretrizModulo_@modulo.Index" class="form-control" />
+          </div>
+          <div class="form-group mb-3">
+            <label asp-for="@modulo.Conteudo">Conteúdo do Módulo</label>
+            <textarea asp-for="@modulo.Conteudo" name="DiretrizModulo[@(modulo.Index)].Conteudo" id="Textrea_@modulo.Index" style="width:100%; height:250px; display:block;"></textarea>
+          </div>
+          <div id="@("secoes"+modulo.Index)">
+            
+            @foreach (var secao in modulo.DiretrizSecao)
+            {
+                <div id="@("secao"+secao.Index+"_"+modulo.Index)" class="pb-3" style="margin-left:20px;">
+                  <input type="hidden" name="DiretrizModulo[@(modulo.Index)].DiretrizSecao[@secao.Index].Index" value="@secao.Index" maxlength="3" />
+                  <input type="hidden" name="DiretrizModulo[@(modulo.Index)].DiretrizSecao[@secao.Index].Id" value="@secao.Id" />
+                  <input type="hidden" name="DiretrizModulo[@(modulo.Index)].DiretrizSecao[@secao.Index].DiretrizModuloId" value="@modulo.Id" />
+                  <div class="form-group mb-3">
+                  <label asp-for="@secao.Titulo">Título da Seção <button type="button" class="btn btn-outline-danger btn-sm" id="addItem" onclick="RemoveItem(@("secao"+secao.Index+"_"+modulo.Index))">Remove Seção</button></label>
+                  <input asp-for="@secao.Titulo" name="DiretrizModulo[@modulo.Index].DiretrizSecao[@secao.Index].Titulo" id="@("DiretrizSecao_"+modulo.Index+"_"+secao.Index)" class="form-control" />
+                  </div>
+                  <div class="form-group mb-3">
+                  <label asp-for="@secao.Conteudo">Conteúdo</label>
+                  <textarea asp-for="@secao.Conteudo" name="DiretrizModulo[@modulo.Index].DiretrizSecao[@secao.Index].Conteudo" id="@("Textrea_"+secao.Index+"_"+modulo.Index)" style="width:100%; height:250px; display:block;"></textarea>
+                  </div>
+                  <div class="form-group mb-3">
+                  <label asp-for="@secao.Bibliografia">Bibliografia</label>
+                  <input asp-for="@secao.Bibliografia" name="DiretrizModulo[@modulo.Index].DiretrizSecao[@secao.Index].Bibliografia" class="form-control" />
+                  </div>
+                  <div class="form-group mb-3">
+                  <label asp-for="@secao.Observacoes">Observações</label>
+                  <textarea asp-for="@secao.Observacoes" name="DiretrizModulo[@modulo.Index].DiretrizSecao[@secao.Index].Observacoes" id="@("Textrea_obs_"+secao.Index+"_"+modulo.Index)" style="width:100%; height:150px; display:block;"></textarea>
+                  </div>
+                </div>
+            }
+          </div>
+          <button type="button" class="btn btn-secondary" id="addItem" onclick="AdicionaSecao(@(modulo.Index))">Adicionar nova Seção</button>
+        </div>
+        }
+      </div>
+      <button type="button" class="btn btn-secondary" id="addItem" onclick="AdicionaModulo()">Adicionar novo Módulo</button>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Atualizar Diretriz</button>
+
+  </div>
+  </div>
+</form>
+

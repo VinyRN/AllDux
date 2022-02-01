@@ -1,0 +1,139 @@
+﻿
+@model FornecedoresFormasPag
+
+@{
+    ViewData["Title"] = "Adicionar Forma de Pagamento";
+}
+
+
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+
+        @{await Html.RenderPartialAsync("_MenuHubPartial");}
+
+        <div class="col py-3" style="margin-left:20px;">
+
+
+            <div class="row flex-nowrap">
+                <div class="col-12 col-sm-12 text-start">
+                    <div class="container-fluid mt-3 px-0">
+                        <nav aria-label="breadcrumb d-flex text-start">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a asp-controller="Fornecedores" asp-action="Index">Fornecedor</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row flex-nowrap">
+                <div class="col-12 text-start">
+
+                    <div class="row mb-3 mt-3">
+                        <div class="col-12 col-sm-12 text-start">
+                            @{await Html.RenderPartialAsync("_AlertPartial");}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row flex-nowrap">
+                <div class="col-12 text-start">
+
+                    <form asp-controller="FornecedoresFormasPag" asp-action="Adicionar" method="post">
+
+                        <input type="hidden" asp-for="IdFornecedor" />
+
+
+                        <div class="row mb-3 mt-3">
+
+
+                            <div class="col-12 col-sm-6 text-start">
+                                <div class="form-group">
+                                    <label asp-for="IdFormaPagamento">Tipo de Pagamento</label>
+                                    <select class="form-select form-select mb-3" asp-for="IdFormaPagamento" id="IdFormaPagamento" name="IdFormaPagamento" required>
+                                        <option value="" selected>Selecione a Forma</option>
+                                        @foreach (FormasPagamento ObjForma in ViewBag.ListaFormasPag)
+                                        {
+                                            <option value="@ObjForma.IdFormaPagamento">@ObjForma.DescrPagamento</option>
+                                        }
+                                    </select>
+
+                                    <span asp-validation-for="IdFormaPagamento" class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+                            <div class="col-12 col-sm-2 text-start">
+                                <div class="form-group">
+                                    <label asp-for="QtdParcelas">Qtd Parcela(s)</label>
+                                    <input asp-for="QtdParcelas" class="form-control" maxlength="10" required />
+                                    <span asp-validation-for="QtdParcelas" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-4 text-start">
+                                <div class="form-group">
+                                    <label asp-for="Status">Status</label>
+                                    <select asp-for="Status" class="form-select form-select mb-3" id="Status" name="Status" required>
+                                        <option value="" selected>Selecione o Status</option>
+                                        <option value="1">Ativo</option>
+                                        <option value="2">Cancelado</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-12 text-start">
+                                <div class="mt-1 pt-1 pb-1">
+                                    <button type="submit" class="btn btn-primary mt-3">Salvar</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cadastro de Fornecedores</h5>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body">
+                    <p><h5>O fornecedor não possui forma de pagamento cadastrada, deseja cadastrar?</h5></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Sim</button>
+
+                    <form asp-controller="Fornecedores" asp-action="Index" method="post">
+                        <button type="submit" class="btn btn-secondary">Não</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $.ajaxSetup({ cache: false });
+            $('#myModal').modal("show");
+        });
+
+
+    </script>
+}
+
+

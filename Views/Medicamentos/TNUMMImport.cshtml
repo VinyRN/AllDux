@@ -1,0 +1,41 @@
+@model TNUMM
+
+@{
+    ViewData["Title"] = "TNUMM - Importar";
+}
+
+<div class="row">
+  <div class="container mt-3">
+    <div class="d-flex text-end" id="buttom-panel" style="float: right;">
+      </div>
+    <nav aria-label="breadcrumb d-flex text-start">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Medicamentos" asp-action="Index">Medicamentos</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+      </ol>
+    </nav>
+    
+  </div>
+
+  @{await Html.RenderPartialAsync("_AlertPartial");}
+
+  <div class="container mb-2 text-center">
+    <h1 class="display-5 fw-bold">@ViewData["Title"]</h1>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-6 offset-3 text-start my-5">
+
+    <form method="POST" enctype="multipart/form-data">
+      <div class="input-group">
+        <input type="file" class="form-control" id="File" name="File" />
+        <button class="btn btn-outline-secondary" type="submit" id="enviar">Enviar Arquivo</button>
+      </div>
+
+    </form>
+
+  </div>
+</div>

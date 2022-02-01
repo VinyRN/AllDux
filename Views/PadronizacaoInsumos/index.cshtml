@@ -1,0 +1,86 @@
+@model IEnumerable<Medicamento>
+
+@{
+    ViewData["Title"] = "Padronização de Insumos";
+}
+
+<div class="row">
+  <div class="container mt-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+      </ol>
+    </nav>
+  </div>
+
+  @{await Html.RenderPartialAsync("_AlertPartial");}
+
+  <div class="container mb-2 text-center">
+    <h1 class="display-5 fw-bold">@ViewData["Title"]</h1>
+    <div class="col-lg-6 mx-auto">
+      <p class="lead mb-4">
+        A padronização de medicamentos e materiais oferece, à área de Compras, cotações negociadas exclusivamente para clientes ALLDUX.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+
+    <div class="table-responsive">
+    <table class="table table-hover padronizacao-insumos" id="Medicamentos">
+      <thead>
+        <tr>
+          <th>Princípio Ativo</th>
+          <th>Nome</th>
+          <th>Laboratório</th>
+          <th>Apresentação</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach (var item in Model)
+        {
+          @foreach (var variacao in item.Variacoes)
+          {
+        <tr class="btnDetalhes" data-id="@variacao.Id.ToString()" style="cursor: pointer;">
+            <td>@item.PrincipioAtivo</td>
+            <td>@variacao.Nome</td>
+            <td>@variacao.Laboratorio</td>
+            <td>@variacao.UnApresentacao @variacao.UnApresentacaoTipo / @variacao.UnMedida @variacao.UnMedidaTipo</td>
+          </tr>
+          }
+        }
+      </tbody>
+    </table>
+    </div>
+
+  </div><!-- /conteudo -->
+</div><!-- row -->
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="fichaTecnicamedicamento"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+  <script type="text/javascript">
+      $(document).ready(function () {
+
+          $.ajaxSetup({ cache: false });
+          $(".btnDetalhes").click(function () {
+              console.log("clicado");
+              var id = $(this).attr("data-id");
+              $("#fichaTecnicamedicamento").load("/Medicamentos/FichaTecnicaMedicamento/" + id, function () {
+                  $('#myModal').modal("show");
+              });
+          });
+      });
+  </script>
+}

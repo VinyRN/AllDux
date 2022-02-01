@@ -1,0 +1,405 @@
+@using System.Globalization
+@model FerramentaAnaliseCusto
+
+@{
+    ViewData["Title"] = "Relatório de Análise de Custo";
+    @* double t1 = 0;
+    double t2 = 0; *@
+}
+
+@functions {
+  public string converte(string t){
+    double temp;
+    if(t != null){
+      temp = Convert.ToDouble(t.Replace(".", ","), new NumberFormatInfo(){NumberDecimalSeparator = ",", NumberGroupSeparator = ".", CurrencyDecimalSeparator = ","});
+    }else{
+      temp = 0;
+    }
+    return string.Format("{0:N}", temp);
+  }
+
+  public string custoOperacionalFinal(){
+    if(Model.CustoOperacionalPercent != null && Model.CustoOperacionalPercent != 0) return Model.CustoOperacionalPercent.ToString()+ " %";
+    if(Model.CustoOperacionalCalculado != null && Model.CustoOperacionalCalculado != 0) return "R$ " + Model.CustoOperacionalCalculado.ToString();
+    
+    return "";
+  }
+}
+
+<div class="row">
+  <div class="container mt-3">
+    <div class="d-flex text-end" id="buttom-panel" style="float: right;">
+    </div>
+    <nav aria-label="breadcrumb d-flex text-start">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+        <li class="breadcrumb-item"><a asp-area="" asp-controller="FerramentasAnalise" asp-action="FerramentaAnaliseCusto">Ferramenta de Análise de Custo</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Relatório</li>
+      </ol>
+    </nav>
+  </div>
+
+  @{await Html.RenderPartialAsync("_AlertPartial");}
+
+  <div class="container mb-2 text-center col-lg-12 offset-lg-0 col-xl-10 offset-xl-1 col-xxl-8 offset-xxl-2">
+    <h1 class="display-5 fw-bold">@ViewData["Title"]</h1>
+    <h5>@Model.DiretrizNome.ToUpper() @Model.tabela.Titulo</h5>
+    <h6>@Model.tabela.ChaveTabelaReduzida</h6>
+    <small>@Model.tabela.ChaveTabela</small>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12 offset-lg-0 col-xl-10 offset-xl-1 col-xxl-8 offset-xxl-2 mt-3">
+
+    <div class="card mb-3">
+      <div class="card-header">Informações do Paciente</div>
+        <div class="card-body">
+
+          <div class="row">
+              <div class="input-group col">
+                <span class="input-group-text">Peso</span>
+                <input type="number" class="form-control" readonly value="@Model.Peso" />
+                <span class="input-group-text">kg</span>
+              </div>
+
+              <div class="input-group col">
+                <span class="input-group-text">Altura</span>
+                <input type="number" class="form-control" readonly value="@Model.Altura" />
+                <span class="input-group-text">cm</span>
+              </div>
+
+              <div class="input-group col">
+                <span class="input-group-text">SC</span>
+                <input type="text" class="form-control" readonly value="@converte(Model.SC().ToString())" />
+              </div>
+
+              @if(Model.MostraAUC() != "0"){
+              <div class="input-group col">
+                <span class="input-group-text">Carbo</span>
+                <input type="text" class="form-control" readonly value="@Model.MostraAUC()" data-bs-toggle="tooltip" data-bs-placement="top" title="Dose de Carboplatina (mg)" />
+                <span class="input-group-text">mg</span>
+              </div>
+              }
+
+          </div>
+      </div>
+    </div><!-- card -->
+    
+    <div class="card mb-3">
+      <div class="card-header">Informações de Custo</div>
+        <div class="card-body">
+          
+            <div class="row">
+              <label for="staticEmail" class="col-sm-3 col-form-label">Imposto (Brasíndice - UF)</label>
+              <div class="col-sm-9">
+                <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="@Model.ImpostoUF()% (@Model.UF)">
+              </div>
+            </div>
+            
+            <div class="row">
+              <label for="staticEmail" class="col-sm-3 col-form-label">Custo Operacional</label>
+              <div class="col-sm-9">
+                <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="@custoOperacionalFinal()">
+              </div>
+            </div>
+            
+            <div class="row">
+              <label for="staticEmail" class="col-sm-3 col-form-label">Tipo de Acesso</label>
+              <div class="col-sm-9">
+                <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="@Model.TipoAcessoNome(Model.TipoAcesso)">
+              </div>
+            </div>
+
+            <div class="row">
+              <label for="staticEmail" class="col-sm-3 col-form-label">Comparação</label>
+              <div class="col-sm-9">
+                <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="@Model.ComparativoNome(Model.Brasindice)">
+              </div>
+            </div>
+            
+            @if(!String.IsNullOrEmpty(Model.PercentPF) && Model.Brasindice == "PFB"){
+            <div class="row">
+              <label for="staticEmail" class="col-sm-3 col-form-label">Percentual sobre Brasindice</label>
+              <div class="col-sm-9">
+                <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="@Model.PercentPF%">
+              </div>
+            </div>
+            }
+        </div>
+    </div><!-- card -->
+
+
+    <div class="card mb-3">
+      <div class="card-header">Comparação com valor de custo ALLDUX x @Model.ComparativoNome(Model.Brasindice)</div>
+        <div class="card-body">
+
+          <div class="row">
+            <label for="staticEmail" class="col-sm-4 col-form-label">Valor 1 Ciclo ALLDUX</label>
+            <div class="col-sm-2">
+              <input type="text" readonly class="form-control-plaintext" id="staticEmail" value='R$ @string.Format("{0:N}", Model.PrecoCiclosAlldux())'>
+            </div>
+
+            <label for="staticEmail" class="col-sm-4 col-form-label">Total Ciclos ALLDUX</label>
+            <div class="col-sm-2">
+              <input type="text" readonly class="form-control-plaintext" id="staticEmail" value='R$ @string.Format("{0:N}", Model.PrecoFinalAlldux())'>
+            </div>
+          </div>
+          
+          <div class="row">
+            <label for="staticEmail" class="col-sm-4 col-form-label">Valor 1 Ciclo @Model.ComparativoNome(Model.Brasindice)</label>
+            <div class="col-sm-2">
+              <input type="text" readonly class="form-control-plaintext" id="staticEmail" value='@("R$ " + converte(Model.PrecoCiclosComparacao().ToString()))'>
+            </div>
+
+            <label for="staticEmail" class="col-sm-4 col-form-label">Total (Ciclos) @Model.ComparativoNome(Model.Brasindice)</label>
+            <div class="col-sm-2">
+              <input type="text" readonly class="form-control-plaintext" id="staticEmail" value='@("R$ " + converte(Model.PrecoFinalComparacao().ToString()))'>
+            </div>
+          </div>
+
+          <div class="row">
+            <label for="staticEmail" class="col-sm-4 col-form-label" style="font-weight: bold;">Margem de Lucratividade (R$)</label>
+            <div class="col-sm-2">
+              <input type="text" readonly class="form-control-plaintext" style="font-weight: bold;" id="staticEmail" value='@converte(Model.MargemCiclos().ToString())'>
+            </div>
+
+            <label for="staticEmail" class="col-sm-4 col-form-label" style="font-weight: bold;">Margem de Lucratividade Total</label>
+            <div class="col-sm-2">
+              <input type="text" readonly class="form-control-plaintext" id="staticEmail" style="font-weight: bold;" value='@converte(Model.MargemTotal().ToString())'>
+            </div>
+          </div>
+          
+          <div class="row">
+            <label for="staticEmail" class="col-sm-4 col-form-label" style="font-weight: bold;">Margem de Lucratividade</label>
+            <div class="col-sm-2">
+              <input type="text" readonly class="form-control-plaintext" id="staticEmail" style="font-weight: bold;" value='@converte(Model.MargemTotalPercent().ToString()) %'>
+            </div>
+          </div>
+
+          <div id="barchart_stacked" style="width: 800px; height: 500px;" class="mt-5"></div>
+
+          <div class="text-black-50">
+            @if(Model.tabela.MedicamentosNaoEncontrados.Count() > 0){
+              <small>Os seguintes medicamentos não foram encontrados na lista @Model.ComparativoNome(Model.Brasindice) e foram substituídos pelos valores médios de mercado calculado pelo Alldux: 
+                @foreach (var item in Model.tabela.MedicamentosNaoEncontrados)
+                {
+                    @(item.Key + " (TISS:" + item.Value + ") ");
+                }
+
+              </small>
+            }
+          </div>
+
+        </div>
+    </div><!-- card -->
+
+
+  </div><!-- /conteudo -->
+</div><!-- row -->
+
+ @*
+<table class="table table-hover align-middle table-diretrizes-precificadas" id="tabela_alldux">
+  <thead>
+    <tr>
+      <th>Ordem</th>
+      <th>Medicamento</th>
+      <th>Mg/m2 ou cp</th>
+      <th>Dias por ciclo</th>
+      <th>SC ou Peso</th>
+      <th>Dose Final</th>
+      <th>Valor cp ou mg/Alldux</th>
+      <th>Valor <br /> (1 ciclo)</th>
+      <th>Total ciclo</th>
+      <th>Valor total <br />(conforme ciclos)</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var linha in Model.tabela.DiretrizPrecificadaRegistro)
+    {
+      <tr>
+        <td>@linha.Ordem</td>
+        <td>@linha.MedicamentoNome @linha.Medicamento</td>
+        <td>
+          @if (!String.IsNullOrEmpty(linha.Mgm2))
+          {
+            @string.Format("{0:N}", linha.Mgm2.Replace(".", ","))
+          }
+        </td>
+        <td>@linha.DiasCiclo</td>
+        <td>
+          @if (!String.IsNullOrEmpty(linha.ScPeso))
+          {
+            @string.Format("{0:N}", linha.ScPeso.Replace(".", ","))
+          }
+        </td>
+        <td>
+          @linha.CalcDoseFinal()
+        </td>
+        <td>
+          @("R$ " + converte(linha.ValorCpMgAlldux.ToString()))
+        </td>
+        <td>
+          @("R$ " + converte(linha.CalcValorCiclo().ToString()))
+        </td>
+        <td>@linha.CicloTotal</td>
+        <td>
+          @if (!String.IsNullOrEmpty(linha.CalcValorTotal().ToString()))
+          {
+            @("R$ " + converte(linha.CalcValorTotal().ToString()))
+          }
+        </td>
+      </tr>
+      @if (linha.CalcValorCiclo().ToString() != null)
+      {
+        t1 += linha.CalcValorCiclo();
+      }
+      @if (linha.CalcValorCiclo().ToString() != null)
+      {
+        t2 += linha.CalcValorTotal();
+      }
+
+    }
+    <tr class="table-total">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Total</td>
+      <td>
+        @("R$ " + converte(Model.tabela.ValorCicloTotal().ToString()))
+      </td>
+      <td></td>
+      <td>
+        @("R$ " + converte(Model.tabela.ValorTotalTotal().ToString()))
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<table class="table table-hover align-middle table-diretrizes-precificadas" id="tabela_brasindice">
+  <thead>
+    <tr>
+      <th>Ordem</th>
+      <th>Medicamento</th>
+      <th>Mg/m2 ou cp</th>
+      <th>Dias por ciclo</th>
+      <th>SC ou Peso</th>
+      <th>Dose Final</th>
+      <th>Valor cp ou mg/@Model.ComparativoNome(Model.Brasindice)</th>
+      <th>Valor <br /> (1 ciclo)</th>
+      <th>Total ciclo</th>
+      <th>Valor total <br />(conforme ciclos)</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var linha in Model.tabela.DiretrizPrecificadaRegistro)
+    {
+      <tr>
+        <td>@linha.Ordem</td>
+        <td>@linha.MedicamentoNome @linha.Medicamento</td>
+        <td>
+          @if (!String.IsNullOrEmpty(linha.Mgm2))
+          {
+            @string.Format("{0:N}", linha.Mgm2.Replace(".", ","))
+          }
+        </td>
+        <td>@linha.DiasCiclo</td>
+        <td>
+          @if (!String.IsNullOrEmpty(linha.ScPeso))
+          {
+            @string.Format("{0:N}", linha.ScPeso.Replace(".", ","))
+          }
+        </td>
+        <td>
+          @linha.CalcDoseFinal()
+        </td>
+        <td>
+          @("R$ " + converte(linha.PrecoComparacao.ToString()))
+        </td>
+        <td>
+          @("R$ " + converte(linha.Comparacao_CalcValorCiclo().ToString()))
+        </td>
+        <td>@linha.CicloTotal</td>
+        <td>
+          @if (!String.IsNullOrEmpty(linha.Comparacao_CalcValorTotal().ToString()))
+          {
+            @("R$ " + converte(linha.Comparacao_CalcValorTotal().ToString()))
+          }
+        </td>
+      </tr>
+      @if (linha.CalcValorCiclo().ToString() != null)
+      {
+        t1 += linha.CalcValorCiclo();
+      }
+      @if (linha.CalcValorCiclo().ToString() != null)
+      {
+        t2 += linha.CalcValorTotal();
+      }
+
+    }
+    <tr class="table-total">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Total</td>
+      <td>
+        @("R$ " + converte(Model.tabela.ValorCicloTotal_Comparacao().ToString()))
+      </td>
+      <td></td>
+      <td>
+        @("R$ " + converte(Model.tabela.ValorTotalTotal_Comparacao().ToString()))
+      </td>
+    </tr>
+  </tbody>
+</table>
+*@
+
+
+
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', {packages:['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+    
+    function drawChart() {
+
+      if(@Model.MargemTotal() > 0){
+        var data = google.visualization.arrayToDataTable([
+          ['', 'Custo', 'Margem de Lucratividade', { role: 'annotation' } ],
+          ['ALLDUX', @Model.PrecoFinalAlldux().ToString("N2").Replace(".", "").Replace(",", "."), @Model.MargemTotal().ToString("N2").Replace(".", "").Replace(",", "."), ''],
+          ['@Html.Raw(Model.ComparativoNome(Model.Brasindice))', @Model.PrecoFinalComparacao().ToString().Replace(".", "").Replace(",", "."), 0, ''],
+        ]);
+      }else{
+          var data = google.visualization.arrayToDataTable([
+          ['', 'Custo', 'Margem de Lucratividade', { role: 'annotation' } ],
+          ['ALLDUX', @Model.PrecoFinalAlldux().ToString("N2").Replace(".", "").Replace(",", "."), 0, ''],
+          ['@Html.Raw(Model.ComparativoNome(Model.Brasindice))', @Model.PrecoFinalComparacao().ToString("N2").Replace(".", "").Replace(",", "."), @Model.MargemTotal().ToString("N2").Replace(".", "").Replace(",", "."), ''],
+        ]);
+      }
+
+      const colors = [
+      { color: '#ff9b30' },
+      { color: '#ffc107' },
+      ];
+
+      var options = {
+        width: 800,
+        height: 500,
+        legend: { position: 'top', maxLines: 3 },
+        bar: {groupWidth: '75%'},
+        isStacked: true,
+        series:  colors,
+      };
+
+      var chart = new google.visualization.BarChart(document.getElementById('barchart_stacked'));
+      chart.draw(data, options);
+  }
+  </script>
