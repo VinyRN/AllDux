@@ -1,2 +1,2 @@
 # AllDux
-AllDux .Net Core, Entity Framework, SQLServer
+VS2019 .Net Core, Entity Framework, SQLServer
